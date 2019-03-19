@@ -1,0 +1,117 @@
+﻿body {
+  background-color: #f7f7f7;
+}
+
+h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+margin-bottom: 0.5rem;
+font-family: ‘Oswald’, sans-serif;
+font-weight: 500;
+line-height: 1.2;
+color: inherit;
+}
+
+.tooltip-inner {
+	color:#000 !important;
+    background-color:#e6e6e6;
+}
+.tooltip.bs-tooltip-right .arrow:before {
+	color:#000 !important;
+    border-right-color: #e6e6e6 !important;
+}
+.tooltip.bs-tooltip-left .arrow:before {
+	color:#000 !important;
+    border-left-color: #e6e6e6 !important;
+}
+.tooltip.bs-tooltip-bottom .arrow:before {
+	color:#000 !important;
+    border-bottom-color: #e6e6e6 !important;
+}
+.tooltip.bs-tooltip-top .arrow:before {
+	color:#000 !important;
+    border-top-color: #e6e6e6 !important;
+}
+
+.calculator{	
+}
+
+.totalPriceStep{
+	background: #1d84f5 !important;
+    color: #ffffff !important;
+}
+
+.order-step {
+	height: 100%;
+    min-height: 250px;
+    background-color: #ffffff;
+    color: #404041;
+    border: 1px solid #ffffff;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    -webkit-box-shadow: 0px 0px 4px 0px rgba(0,0,0,0.18);
+    -moz-box-shadow: 0px 0px 4px 0px rgba(0,0,0,0.18);
+    box-shadow: 0px 0px 4px 0px rgba(0,0,0,0.18);
+}
+
+.handle-type-img{
+	width: 70px;
+	height: 70px;
+}
+
+.cabin-type-img{
+	width: 170px;
+	height: 240px;
+}
+
+.sliding-door-type-img{
+	width: 110px;
+    height: 150px;
+}
+
+.swing-door-type-img{
+	width: 110px;
+    height: 150px;
+}
+
+.sliding-door-type-label{
+	text-align: center;
+    width: 100%;
+}
+
+.swing-door-type-label{
+	text-align: center;
+    width: 100%;
+}
+
+.image-radio-item .custom-control-label::before{
+	display:none !important;
+}
+
+.image-radio-item.custom-radio input[type=radio]:checked + label {
+  border: 1px solid #fff;
+  box-shadow: 0 0 3px 3px #007bff;
+}
+
+.image-radio-item.custom-radio input[type=radio] + label {
+  border: 1px dashed #e6e6e6;
+  transition: 500ms all;
+}
+
+
+
+.order-step-radio{
+}
+
+.numberInput{
+	width:100px;
+}
+
+.left{
+    float: left; 
+}
+.right{
+    float: right; 
+}
+.blue-text{
+	color: #5ec7f1;
+}
