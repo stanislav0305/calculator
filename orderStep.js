@@ -4,6 +4,7 @@
 	let _orderStepsHelper;
 	let _calculationHelper;
 	let _orderSteps;
+	let _railAndSocketStep;
 	
 	let orderStep =
 	{
@@ -25,7 +26,7 @@
 			}
 			
 			let $orderStep = $('<div class="order-step">')
-			.append('<div id='+_stepId+' class="card-body">')
+			.append(`<div id=${_stepId} class="card-body">`)
 			.appendTo($column);
 			
 			if (step.isTotalPriceStep === true){
@@ -43,9 +44,9 @@
 					if (element.itemChange === 'eventAppendSizeElements'){
 						currentOrderStep.renderRadioAppendSize(element);
 					} else if (element.itemChange === 'eventInstallationOfRails'){
-						currentOrderStep.renderRadioInstallationOfRails(element);
+						_railAndSocketStep.renderRadioInstallationOfRails(element, _stepId);
 					} else if (element.itemChange === 'eventSocketsCount'){
-						currentOrderStep.renderRadioSocketsCount(element);
+						_railAndSocketStep.renderRadioSocketsCount(element, _stepId);
 					} else if(element.itemChange === 'eventHandleTypes'){
 						currentOrderStep.renderRadioHandleTypes(element);
 					} else if (element.itemChange === 'eventCabinTypes'){
@@ -73,10 +74,10 @@
 				titleContainer.append(toolTip);
 			}
 			
-			titleContainer.appendTo('#'+_stepId);
+			titleContainer.appendTo(`#${_stepId}`);
 		},
 		renderElementTitle : function(elementTitle, elementInfo) {
-			let elementTitleElement = $('<h6 class="card-subtitle mb-2 text-muted">'+elementTitle+'</div>');
+			let elementTitleElement = $(`<h6 class="card-subtitle mb-2 text-muted">${elementTitle}</div>`);
 			
 			let currentOrderStep = this;
 			if (elementInfo !== undefined){
@@ -84,24 +85,24 @@
 				elementTitleElement.append(toolTip);
 			}
 			
-			elementTitleElement.appendTo('#'+_stepId);
+			elementTitleElement.appendTo(`#${_stepId}`);
 		},
 		renderToolTip:function(toolTipText){
-			return $('<img src="img/question.png" alt="" class="float-right" data-toggle="tooltip" data-placement="top" title="'+toolTipText+'" />')
+			return $(`<img src="img/question.png" alt="" class="float-right" data-toggle="tooltip" data-placement="top" title="${toolTipText}" />`)
 		},
 		renderTextBlock:function(element){
 			if (element.textBlock !== undefined){
-				$('<p class="card-text text-left text-muted">'+element.textBlock+'</p>').appendTo('#'+_stepId);
+				$(`<p class="card-text text-left text-muted">${element.textBlock}</p>`).appendTo(`#${_stepId}`);
 			}
 		},
 		textBlockCenter:function(element){
 			if (element.textBlockCenter !== undefined){
-				$('<p class="card-text text-center">'+element.textBlockCenter+'</p>').appendTo('#'+_stepId);
+				$(`<p class="card-text text-center">${element.textBlockCenter}</p>`).appendTo(`#${_stepId}`);
 			}
 		},
 		priceBlock:function(element){
 			if (element.priceBlock !== undefined){
-				$('<h5 class="card-text text-center">≈ <span id="totalPrice">'+element.priceBlock+'</span> EUR</h5>').appendTo('#'+_stepId);
+				$(`<h5 class="card-text text-center">≈ <span id="totalPrice">${element.priceBlock}</span> EUR</h5>`).appendTo(`#${_stepId}`);
 			}
 		},
 		setTotalPrice(totalPrice){
@@ -114,9 +115,9 @@
 			} else if (element.itemChange === 'eventAppendSizeElements'){
 				this.setRadioEventAppendSizeElements(element.id);
 			} else if (element.itemChange === 'eventInstallationOfRails'){
-				this.setEventInstallationOfRailsElements(element.id);
+				_railAndSocketStep.setEventInstallationOfRailsElements(element.id);
 			} else if(element.itemChange === 'eventSocketsCount'){
-				this.setEventSocketsCountElements(element.id);				
+				_railAndSocketStep.setEventSocketsCountElements(element.id);				
 			} else if (element.itemChange === 'eventHandleTypes'){
 				this.setEventRadioHandleTypesElements(element.id);
 			} else if (element.itemChange === 'eventCabinTypes'){
@@ -141,16 +142,16 @@
 			if (element.items !== undefined){				
 				let $container = $('<div class="container mb-4 px-0">');
 				let $row = $('<div class="row">');
-				let $radio = $('<div id="'+element.id+'" class="col">');
+				let $radio = $(`<div id="${element.id}" class="col">`);
 				$radio.appendTo($row);
 				
 				$container.append($row);
-				$('#'+_stepId).append($container);
+				$(`#${_stepId}`).append($container);
 				
 				element.items.forEach(function(item, index){							
 					let radioItemDiv = $('<div class="custom-control custom-radio">');
 					let chackedAtr = item.isSelected === true ? 'checked' : '';
-					radioItemDiv.append('<input id="'+item.id+'" type="radio" class="custom-control-input" name="'+element.id+'" '+chackedAtr+' step-id="'+_stepId+'"/>').append('<label for="'+item.id+'" class="custom-control-label">'+item.title+'</label>');
+					radioItemDiv.append(`<input id="${item.id}" type="radio" class="custom-control-input" name="${element.id}" ${chackedAtr} step-id="${_stepId}"/>`).append(`<label for="${item.id}" class="custom-control-label">${item.title}</label>`);
 					
 					if (item.info !== undefined){
 						let toolTip = currentOrderStep.renderToolTip(item.info);
@@ -167,7 +168,7 @@
 		setRadioEventRefreshSteps:function(elementId){
 			this.readioIdsWithEventRefreshSteps.push(elementId);
 			
-			$(document).on('change', 'input:radio[name^="'+elementId+'"]', function (event) {
+			$(document).on('change', `input:radio[name^="${elementId}"]`, function (event) {
 				let stepId = $(this).attr('step-id');
 				let itemId = $(this).attr('id');
 				let elementId = $(this).attr('name');
@@ -185,7 +186,7 @@
 		setRadioEventDefault:function(elementId){
 			this.readioIdsWithEventRefreshSteps.push(elementId);
 			
-			$(document).on('change', 'input:radio[name^="'+elementId+'"]', function (event) {
+			$(document).on('change', `input:radio[name^="${elementId}"]`, function (event) {
 				let stepId = $(this).attr('step-id');
 				let itemId = $(this).attr('id');
 				let elementId = $(this).attr('name');
@@ -202,7 +203,7 @@
 		},
 		removeRadioEventRefreshSteps:function(){
 			for(let i=0; i < this.readioIdsWithEventRefreshSteps.length; i++){
-				$(document).off('change', 'input:radio[name^="'+this.readioIdsWithEventRefreshSteps[i]+'"]');
+				$(document).off('change', `input:radio[name^="${this.readioIdsWithEventRefreshSteps[i]}"]`);
 			}
 			
 			this.readioIdsWithEventRefreshSteps = [];
@@ -218,16 +219,16 @@
 			if (element.items !== undefined){				
 				let $container = $('<div class="container mb-4 px-0">');
 				let $row = $('<div class="row">');
-				let $radio = $('<div id="'+element.id+'" class="col-1 mr-4 mt-4">');
+				let $radio = $(`<div id="${element.id}" class="col-1 mr-4 mt-4">`);
 				$radio.appendTo($row);
 				
 				$container.append($row);
-				$('#'+_stepId).append($container);
+				$(`#${_stepId}`).append($container);
 				
 				element.items.forEach(function(item, index){							
 					let radioItemDiv = $('<div class="custom-control custom-radio">');
 					let chackedAtr = item.isSelected === true ? 'checked' : '';
-					radioItemDiv.append('<input id="'+item.id+'" type="radio" class="custom-control-input" name="'+element.id+'" '+chackedAtr+' step-id="'+_stepId+'"/>').append('<label for="'+item.id+'" class="custom-control-label">'+item.title+'</label>');
+					radioItemDiv.append(`<input id="${item.id}" type="radio" class="custom-control-input" name="${element.id}" ${chackedAtr} step-id="${_stepId}"/>`).append(`<label for="${item.id}" class="custom-control-label">${item.title}</label>`);
 					
 					if (item.info !== undefined){
 						let toolTip = currentOrderStep.renderToolTip(item.info);
@@ -245,12 +246,12 @@
 		setRadioEventAppendSizeElements:function(elementId){
 			this.readioIdsWithEventAppendSizeElements.push(elementId);
 			
-			$(document).on('change', 'input:radio[name^="'+elementId+'"]', function (event) {
+			$(document).on('change', `input:radio[name^="${elementId}"]`, function (event) {
 								
 				let stepId = $(this).attr('step-id');
 				let itemId = $(this).attr('id');
 				let $itemParent = $(this).parent();
-				let panelCount = $itemParent.find('label[for="'+itemId+'"]').text();
+				let panelCount = $itemParent.find(`label[for="${itemId}"]`).text();
 				let radioId = $(this).attr('name');				
 				let step = _orderStepsHelper.getStepOrNull(stepId);
 				
@@ -268,7 +269,7 @@
 		},
 		removeRadioEventAppendSizeElements:function(){
 			for(let i=0; i < this.readioIdsWithEventAppendSizeElements.length; i++){
-					$(document).off('change', 'input:radio[name^="'+this.readioIdsWithEventAppendSizeElements[i]+'"]');
+					$(document).off('change', `input:radio[name^="${this.readioIdsWithEventAppendSizeElements[i]}"]`);
 				}
 				
 			this.readioIdsWithEventAppendSizeElements = [];
@@ -277,10 +278,10 @@
 		
 		renderPanelSizeElementRows: function(element, elementsGroupRowCount, stepId){
 			let elementId = element.id;
-			let $container = $('#'+elementId).parent();
-			let sizeElementGroupId = 'size-element-specific-group-'+elementId;
+			let $container = $(`#${elementId}`).parent();
+			let sizeElementGroupId = `size-element-specific-group-${elementId}`;
 			
-			let sizeElementGroup = $('<div id="'+sizeElementGroupId+'" class="col right">');
+			let sizeElementGroup = $(`<div id="${sizeElementGroupId}" class="col right">`);
 			sizeElementGroup.appendTo($container);
 						
 			$('<h8 class="card-subtitle mb-2 text-muted">Размер:</div>')
@@ -293,20 +294,18 @@
 				$('<div class="row mt-1 ml-0 mb-0 mr-0">')
 				.append(
 					$('<div class="col-5 p-0">')
-						.append($('<lebel>').text('Высота '+ i))
+						.append($('<lebel>').text(`Высота ${i}`))
 						.append(
-							$('<input type="number" class="numberInput ml-1" step-id="'+stepId+'" element-id="'+elementId+'" it-is="height" size-number="'+
-							enteredVal.number+'">')
+							$(`<input type="number" class="numberInput ml-1" step-id="${stepId}" element-id="${elementId}" it-is="height" size-number="${enteredVal.number}" min="1" max="99999">`)
 							.val(enteredVal.h)
 						)
 						.append($('<lebel class="blue-text">').text('мм'))
 				)
 				.append(
 				$('<div class="col-5 p-0">')
-					.append($('<lebel class="ml-1">').text('Длина '+ i))
+					.append($('<lebel class="ml-1">').text(`Длина ${i}`))
 					.append(
-						$('<input type="number" class="numberInput ml-1" step-id="'+stepId+'" element-id="'+elementId+'" it-is="width" size-number="'+
-						enteredVal.number+'">')
+						$(`<input type="number" class="numberInput ml-1" step-id="${stepId}" element-id="${elementId}" it-is="width" size-number="${enteredVal.number}" min="1" max="99999">`)
 						.val(enteredVal.w)
 					)
 					.append($('<lebel class="blue-text">').text('мм'))
@@ -315,28 +314,29 @@
 				$('<div class="col-2 p-0">')
 					.append(
 						$('<div class="custom-control custom-checkbox">')
-							.append('<input id="hardening-'+enteredVal.number+'" class="custom-control-input" type="checkbox" step-id="'+stepId+'" element-id="'+elementId+'" it-is="hardening" size-number="'+ enteredVal.number+'" '+isHardenedChecked+'>')
-							.append('<label class="custom-control-label" for="hardening-'+enteredVal.number+'">Закалка</label>')
+							.append(`<input id="hardening-${enteredVal.number}" class="custom-control-input" type="checkbox" step-id="${stepId}" element-id="${elementId
+						    }" it-is="hardening" size-number="${enteredVal.number}" ${isHardenedChecked}>`)
+							.append(`<label class="custom-control-label" for="hardening-${enteredVal.number}">Закалка</label>`)
 					)
 				)
 				.appendTo($elementsGroupRowContainer);
 			}
 			
-			$elementsGroupRowContainer.appendTo('#'+sizeElementGroupId);
+			$elementsGroupRowContainer.appendTo(`#${sizeElementGroupId}`);
 			
 			this.setIputPanelSizeEventOutElements(elementId);
 		},
 		removePanelSizeElementRows: function(elementId){
 			this.removeIputPanelSizeEventOutElement(elementId);
 			
-			let sizeElementGroupId = 'size-element-specific-group-'+elementId;
-			$('#'+sizeElementGroupId).remove();
+			let sizeElementGroupId = `size-element-specific-group-${elementId}`;
+			$(`#${sizeElementGroupId}`).remove();
 		},
 		inputPanelSizeEventElements:[],
 		setIputPanelSizeEventOutElements:function(sizeElementGroupId){
 			this.inputPanelSizeEventElements.push(sizeElementGroupId);
 			
-			$(document).on('change', 'input[element-id="'+sizeElementGroupId+'"]', function (event) {
+			$(document).on('change', `input[element-id="${sizeElementGroupId}"]`, function (event) {
 				let stepId = $(this).attr('step-id');
 				let elementId = $(this).attr('element-id');
 				let sizeNumber = $(this).attr('size-number');
@@ -358,281 +358,18 @@
 		},
 		removeIputPanelSizeEventOutElements:function(){
 			for(let i=0; i < this.inputPanelSizeEventElements.length; i++){
-					$(document).off('change', 'input[element-id="'+this.inputPanelSizeEventElements[i]+'"]');
+					$(document).off('change', `input[element-id="${this.inputPanelSizeEventElements[i]}"]`);
 			}
 				
 			this.inputPanelSizeEventElements = [];
 		},
 		removeIputPanelSizeEventOutElement:function(elementId){
-			$(document).off('change', 'input[element-id="'+elementId+'"]');
+			$(document).off('change', `input[element-id="${elementId}"]`);
 			this.inputPanelSizeEventElements = this.inputPanelSizeEventElements.filter(e => e !== elementId);
 		},
 		
 		
-		renderRadioInstallationOfRails:function(element){
-			let currentOrderStep = this;
-								
-			if (element.title !== undefined){
-				currentOrderStep.renderElementTitle(element.title, element.info);
-			}
-			
-			if (element.items !== undefined){				
-				let $container = $('<div class="container mb-4 px-0">');
-				let $row = $('<div class="row">');
-				let $radio = $('<div id="'+element.id+'" class="col-1 mr-4 mt-4">');
-				$radio.appendTo($row);
-				
-				$container.append($row);
-				$('#'+_stepId).append($container);
-				
-				element.items.forEach(function(item, index){							
-					let radioItemDiv = $('<div class="custom-control custom-radio">');
-					let chackedAtr = item.isSelected === true ? 'checked' : '';
-					radioItemDiv.append('<input id="'+item.id+'" type="radio" class="custom-control-input" name="'+element.id+'" '+chackedAtr+' step-id="'+_stepId+'"/>').append('<label for="'+item.id+'" class="custom-control-label">'+item.title+'</label>');
-					
-					if (item.info !== undefined){
-						let toolTip = currentOrderStep.renderToolTip(item.info);
-						radioItemDiv.append(toolTip);
-					}
-					
-					$radio.append(radioItemDiv);
-				});
-
-				currentOrderStep.renderInputInstallationOfRails(element, _stepId);
-				currentOrderStep.radioSetEvents(element);
-			}
-		},
-		renderInputInstallationOfRails: function(element, stepId){
-			let elementId = element.id;
-			let $container = $('#'+elementId).parent();
-			let installationOfRailsCountId = 'installation-of-rails-count-'+elementId;
-			
-			let sizeElementGroup = $('<div id="'+installationOfRailsCountId+'" class="col right mt-3">');
-			sizeElementGroup.appendTo($container);
-			
-			var $elementsGroupRowContainer = $('<div class="container">');
-			let enteredVal = element.enteredValue;
-			for(let i=0; i<element.items.length; i++){
-				let item = element.items[i];
-				
-				if(item.title === 'Да'){
-					let displayCssClass = item.isSelected === true ? 'd-inline-block' : 'd-none';
-					
-					$('<div class="row mt-1 ml-0 mb-0 mr-0">')
-					.append(
-						$('<div class="p-0">')
-							.append(
-								$('<input id="inputInstallationOfRails" type="number" class="numberInput" step-id="'+stepId+'" element-id="'+elementId+'" item-id="'+item.id+'">')
-								.addClass(displayCssClass)
-								.val(enteredVal)
-							)
-							.append(
-								$('<lebel id="labelInstallationOfRails" class="blue-text ml-1">')
-								.addClass(displayCssClass)
-								.text('шт')
-							)
-					)
-					.appendTo($elementsGroupRowContainer);
-				}
-			}
-			
-			$elementsGroupRowContainer.appendTo('#'+installationOfRailsCountId);
-			
-			this.setEventInputInstallationOfRails();
-		},
-		displayInputInstallationOfRails: function(show){
-			if (show === true){
-				$('#inputInstallationOfRails').removeClass('d-none');
-				$('#inputInstallationOfRails').addClass('d-inline-block');
-				
-				$('#labelInstallationOfRails').removeClass('d-none');
-				$('#labelInstallationOfRails').addClass('d-inline-block');
-			}
-			else{
-				$('#inputInstallationOfRails').removeClass('d-inline-block');
-				$('#inputInstallationOfRails').addClass('d-none');
-				
-				$('#labelInstallationOfRails').removeClass('d-inline-block');
-				$('#labelInstallationOfRails').addClass('d-none');
-			}
-		},
-		eventInstallationOfRailsElements:[],
-		setEventInstallationOfRailsElements:function(elementId){
-			this.eventInstallationOfRailsElements.push(elementId);
-			$(document).on('change', 'input:radio[name^="'+elementId+'"]', function (event) {
-				let stepId = $(this).attr('step-id');
-				let elementId = $(this).attr('name');
-				let itemId = this.id;
-				
-				let setp = _orderStepsHelper.getStepOrNull(stepId);
-				let element = _orderStepsHelper.getStepElementOrNull(setp, elementId);
-				
-				_orderStepsHelper.unselectElementItems(element.items);
-				let selectedItem = _orderStepsHelper.selectElementItem(element.items, itemId);
-				
-				let show = selectedItem.title === 'Да' && selectedItem.isSelected === true;
-				orderStep.displayInputInstallationOfRails(show);
-				_calculationHelper.recalcAll();
-			});
-		},
-		removeEventInstallationOfRailsElements:function(){
-			for(let i=0; i < this.eventInstallationOfRailsElements.length; i++){
-					$(document).off('change', 'input:radio[name^="'+this.eventInstallationOfRailsElements[i]+'"]');
-			}
-				
-			this.eventInstallationOfRailsElements = [];
-		},
-
-		setEventInputInstallationOfRails:function(){
-			$(document).on('change', '#inputInstallationOfRails', function (event) {
-				let stepId = $(this).attr('step-id');
-				let elementId = $(this).attr('element-id');
-				let itemId = $(this).attr('item-id');
-				let val = $('#inputInstallationOfRails').val();
-				
-				let setp = _orderStepsHelper.getStepOrNull(stepId);
-				let element = _orderStepsHelper.getStepElementOrNull(setp, elementId);
-				
-				_orderStepsHelper.saveInstallationOfRailsCount(element, itemId, val);
-				_calculationHelper.recalcAll();
-			});
-		},
-		removeEventInputInstallationOfRails:function(){
-			$(document).off('change', '#inputInstallationOfRails');
-		},
 		
-		
-		renderRadioSocketsCount:function(element){
-			let currentOrderStep = this;
-								
-			if (element.title !== undefined){
-				currentOrderStep.renderElementTitle(element.title, element.info);
-			}
-			
-			if (element.items !== undefined){				
-				let $container = $('<div class="container mb-4 px-0">');
-				let $row = $('<div class="row">');
-				let $radio = $('<div id="'+element.id+'" class="col-1 mr-4 mt-4">');
-				$radio.appendTo($row);
-				
-				$container.append($row);
-				$('#'+_stepId).append($container);
-				
-				element.items.forEach(function(item, index){							
-					let radioItemDiv = $('<div class="custom-control custom-radio">');
-					let chackedAtr = item.isSelected === true ? 'checked' : '';
-					radioItemDiv.append('<input id="'+item.id+'" type="radio" class="custom-control-input" name="'+element.id+'" '+chackedAtr+' step-id="'+_stepId+'"/>').append('<label for="'+item.id+'" class="custom-control-label">'+item.title+'</label>');
-					
-					if (item.info !== undefined){
-						let toolTip = currentOrderStep.renderToolTip(item.info);
-						radioItemDiv.append(toolTip);
-					}
-					
-					$radio.append(radioItemDiv);
-				});
-
-				currentOrderStep.renderInputSocketsCount(element, _stepId);
-				currentOrderStep.radioSetEvents(element);
-			}
-		},
-		renderInputSocketsCount: function(element, stepId){
-			let elementId = element.id;
-			let $container = $('#'+elementId).parent();
-			let installationOfRailsCountId = 'sockets-count-'+elementId;
-			
-			let sizeElementGroup = $('<div id="'+installationOfRailsCountId+'" class="col right mt-3">');
-			sizeElementGroup.appendTo($container);
-			
-			var $elementsGroupRowContainer = $('<div class="container">');
-			let enteredVal = element.enteredValue;
-			for(let i=0; i<element.items.length; i++){
-				let item = element.items[i];
-				
-				if(item.title === 'Да'){
-					let displayCssClass = item.isSelected === true ? 'd-inline-block' : 'd-none';
-					
-					$('<div class="row mt-1 ml-0 mb-0 mr-0">')
-					.append(
-						$('<div class="p-0">')
-							.append(
-								$('<input id="inputSocketsCount" type="number" class="numberInput" step-id="'+stepId+'" element-id="'+elementId+'" item-id="'+item.id+'">')
-								.addClass(displayCssClass)
-								.val(enteredVal)
-							)
-							.append(
-								$('<lebel id="labelSocketsCount" class="blue-text ml-1">')
-								.addClass(displayCssClass)
-								.text('шт')
-							)
-					)
-					.appendTo($elementsGroupRowContainer);
-				}
-			}
-			
-			$elementsGroupRowContainer.appendTo('#'+installationOfRailsCountId);
-			
-			this.setEventInputSocketsCount();
-		},
-		displayInputSocketsCount: function(show){
-			if (show === true){
-				$('#inputSocketsCount').removeClass('d-none');
-				$('#inputSocketsCount').addClass('d-inline-block');
-				
-				$('#labelSocketsCount').removeClass('d-none');
-				$('#labelSocketsCount').addClass('d-inline-block');
-			}
-			else{
-				$('#inputSocketsCount').removeClass('d-inline-block');
-				$('#inputSocketsCount').addClass('d-none');
-				
-				$('#labelSocketsCount').removeClass('d-inline-block');
-				$('#labelSocketsCount').addClass('d-none');
-			}
-		},
-		eventSocketsCountElements:[],
-		setEventSocketsCountElements:function(elementId){
-			this.eventSocketsCountElements.push(elementId);
-			$(document).on('change', 'input:radio[name^="'+elementId+'"]', function (event) {
-				let stepId = $(this).attr('step-id');
-				let elementId = $(this).attr('name');
-				let itemId = this.id;
-				
-				let setp = _orderStepsHelper.getStepOrNull(stepId);
-				let element = _orderStepsHelper.getStepElementOrNull(setp, elementId);
-				
-				_orderStepsHelper.unselectElementItems(element.items);
-				let selectedItem = _orderStepsHelper.selectElementItem(element.items, itemId);
-				
-				let show = selectedItem.title === 'Да' && selectedItem.isSelected === true;
-				orderStep.displayInputSocketsCount(show);
-				_calculationHelper.recalcAll();
-			});
-		},
-		removeSocketsCountElements:function(){
-			for(let i=0; i < this.eventSocketsCountElements.length; i++){
-					$(document).off('change', 'input:radio[name^="'+this.eventSocketsCountElements[i]+'"]');
-			}
-				
-			this.eventSocketsCountElements = [];
-		},
-		
-		setEventInputSocketsCount:function(){
-			$(document).on('change', '#inputSocketsCount', function (event) {
-				let stepId = $(this).attr('step-id');
-				let elementId = $(this).attr('element-id');
-				let itemId = $(this).attr('item-id');
-				let val = $('#inputSocketsCount').val();
-				
-				let setp = _orderStepsHelper.getStepOrNull(stepId);
-				let element = _orderStepsHelper.getStepElementOrNull(setp, elementId);
-				
-				_orderStepsHelper.saveSocketsCount(element, itemId, val);
-				_calculationHelper.recalcAll();
-			});
-		},
-		removeEventInputSocketsCount:function(){
-			$(document).off('change', '#inputSocketsCount');
-		},
 		
 		
 		renderRadioHandleTypes:function(element){
@@ -647,14 +384,15 @@
 				let $row = $('<div class="row">');
 
 				$container.append($row);
-				$('#'+_stepId).append($container);
+				$(`#${_stepId}`).append($container);
 				
 				element.items.forEach(function(item, index){							
 					let radioItemDiv = $('<div class="image-radio-item custom-control custom-radio col-4 my-1">');
 					let chackedAtr = item.isSelected === true ? 'checked' : '';
 					radioItemDiv
-					.append('<input id="'+item.id+'" type="radio" class="custom-control-input" name="'+element.id+'" '+chackedAtr+' step-id="'+_stepId+'"/>')
-					.append('<label for="'+item.id+'" class="custom-control-label"><img for="'+item.id+'" class="custom-control-label handle-type-img" src="img/handleTypes/'+item.title+'.jpg" alt="'+item.title+'"/></label>');
+					.append(`<input id="${item.id}" type="radio" class="custom-control-input" name="${element.id}" ${chackedAtr} step-id="${_stepId}"/>`)
+					.append(`<label for="${item.id}" class="custom-control-label"><img for="${item.id
+					        }" class="custom-control-label handle-type-img" src="img/handleTypes/${item.title}.jpg" alt="${item.title}"/></label>`);
 					
 					if (item.info !== undefined){
 						let toolTip = currentOrderStep.renderToolTip(item.info);
@@ -670,7 +408,7 @@
 		eventRadioHandleTypesElements:[],
 		setEventRadioHandleTypesElements:function(elementId){
 			this.eventRadioHandleTypesElements.push(elementId);
-			$(document).on('change', 'input:radio[name^="'+elementId+'"]', function (event) {
+			$(document).on('change', `input:radio[name^="${elementId}"]`, function (event) {
 				let stepId = $(this).attr('step-id');
 				let elementId = $(this).attr('name');
 				let itemId = this.id;
@@ -684,7 +422,7 @@
 		},
 		removeEventRadioHandleTypesElements:function(){
 			for(let i=0; i < this.eventRadioHandleTypesElements.length; i++){
-				$(document).off('change', 'input:radio[name^="'+this.eventRadioHandleTypesElements[i]+'"]');
+				$(document).off('change', `input:radio[name^="${this.eventRadioHandleTypesElements[i]}"]`);
 			}
 
 			this.eventRadioHandleTypesElements = [];
@@ -711,7 +449,7 @@
 				let $row = $('<div class="row">');
 				$mainRowColumn1.append($row);
 				
-				$('#'+_stepId).append($mainRow);
+				$(`#${_stepId}`).append($mainRow);
 				
 				element.items.forEach(function(item, index){											
 					let $radioItemDiv = $('<div class="image-radio-item custom-control custom-radio col-3 my-1 mx-0">');
@@ -722,8 +460,9 @@
 					}
 					
 					$radioItemDiv
-					.append('<input id="'+item.id+'" type="radio" class="custom-control-input" name="'+element.id+'" '+chackedAtr+' step-id="'+_stepId+'"/>')
-					.append('<label for="'+item.id+'" class="custom-control-label"><img for="'+item.id+'" class="custom-control-label cabin-type-img img-fluid" src="img/cabinTypes/'+item.number+'.png" alt="'+item.number+'"/></label>');
+					.append(`<input id="${item.id}" type="radio" class="custom-control-input" name="${element.id}" ${chackedAtr} step-id="${_stepId}"/>`)
+					.append(`<label for="${item.id}" class="custom-control-label"><img for="${item.id
+					        }" class="custom-control-label cabin-type-img img-fluid" src="img/cabinTypes/${item.number}.png" alt="${item.number}"/></label>`);
 					
 					if (item.info !== undefined){
 						let toolTip = currentOrderStep.renderToolTip(item.info);
@@ -775,7 +514,7 @@
 						)
 						.appendTo(sizeBlock);
 						
-					maxValueAtr = 'max-val="'+size.maxValue+'"';
+					maxValueAtr = `max-val="${size.maxValue}"`;
 				}
 				
 				$('<div>')
@@ -786,14 +525,15 @@
 						$('<span class="blue-text mr-1">').text(size.name)
 					)
 					.append(
-						$('<input id="'+size.name+'" step-id="'+stepId+'" element-id="'+elementId+'" item-id="'+selectedItem.id+'" type="number" class="numberInput form-control form-control-sm" '+maxValueAtr+'>')
+						$(`<input id="${size.name}" step-id="${stepId}" element-id="${elementId}" item-id="${selectedItem.id
+						    }" type="number" class="numberInput form-control form-control-sm" ${maxValueAtr} min="1" max="99999">`)
 						.val(size.enteredValue)
 					)
 					.appendTo(sizeBlock);
 				
 				if (size.maxValue !== undefined){
 					$('<div class="invalid-feedback">')
-						.append('Значение должно быть меньше или равно '+size.maxValue)
+						.append(`Значение должно быть меньше или равно ${size.maxValue}`)
 						.appendTo(sizeBlock);
 				}
 						
@@ -818,10 +558,11 @@
 					
 					$('<div class="custom-control custom-radio">')
 					.append(
-						$('<input id="'+additionalItem.id+'" type="radio" class="custom-control-input" name="'+selectedItem.additionalParamatres[0].id+'" '+chackedAtr+' item-id="'+selectedItem.id+'" element-id="'+elementId+'"  step-id="'+stepId+'"/>')
+						$(`<input id="${additionalItem.id}" type="radio" class="custom-control-input" name="${selectedItem.additionalParamatres[0].id}" ${chackedAtr} item-id="${selectedItem.id}" element-id="${elementId
+						    }"  step-id="${stepId}"/>`)
 					)
 					.append(
-						$('<label for="'+additionalItem.id+'" class="custom-control-label">'+additionalItem.title+'</label>')
+						$(`<label for="${additionalItem.id}" class="custom-control-label">${additionalItem.title}</label>`)
 					)
 					.appendTo($radioItemDiv);
 					
@@ -836,7 +577,7 @@
 		eventCabinTypesElements:[],
 		setEventCabinTypesElements: function(elementId){
 			this.eventCabinTypesElements.push(elementId);
-			$(document).on('change', 'input:radio[name^="'+elementId+'"]', function (event) {
+			$(document).on('change', `input:radio[name^="${elementId}"]`, function (event) {
 				let stepId = $(this).attr('step-id');
 				let elementId = $(this).attr('name');
 				let itemId = this.id;
@@ -853,7 +594,7 @@
 		},
 		removeEventCabinTypesElements:function(){			
 			for(let i=0; i < this.eventCabinTypesElements.length; i++){
-				$(document).off('change', 'input:radio[name^="'+this.eventCabinTypesElements[i]+'"]');
+				$(document).off('change', `input:radio[name^="${this.eventCabinTypesElements[i]}"]`);
 			}
 
 			this.eventCabinTypesElements = [];
@@ -861,7 +602,7 @@
 		eventFocusOutCabinTypeSizes:[],
 		setEventFocusOutCabinTypeSize(sizeName){
 			this.eventFocusOutCabinTypeSizes.push(sizeName);
-			$(document).on('focusout', '#'+sizeName, function (event) {
+			$(document).on('focusout', `#${sizeName}`, function (event) {
 				let stepId = $(this).attr('step-id');
 				let elementId = $(this).attr('element-id');
 				let itemId = $(this).attr('item-id');
@@ -884,7 +625,7 @@
 		},
 		removeEventFocusOutCabinTypeSize(){
 			for(let i=0; i < this.eventFocusOutCabinTypeSizes.length; i++){
-				$(document).off('focusout', 'input:["#'+this.eventFocusOutCabinTypeSizes[i]+'"]');
+				$(document).off('focusout', `input:["#${this.eventFocusOutCabinTypeSizes[i]}"]`);
 			}
 
 			this.eventFocusOutCabinTypeSizes = [];
@@ -892,7 +633,7 @@
 		eventCahngeCabinTypesAdditionalParamatrs:[],
 		setEventCahngeCabinTypesAdditionalParamatrs(elementId){
 			this.eventCahngeCabinTypesAdditionalParamatrs.push(elementId);
-			$(document).on('change', 'input:radio[name^="'+elementId+'"]', function (event) {
+			$(document).on('change', `input:radio[name^="${elementId}"]`, function (event) {
 				let stepId = $(this).attr('step-id');
 				let elementId = $(this).attr('element-id');
 				let itemId = $(this).attr('item-id');
@@ -908,7 +649,7 @@
 		},
 		removeEventCahngeCabinTypesParametrs(){
 			for(let i=0; i < this.eventCahngeCabinTypesAdditionalParamatrs.length; i++){
-				$(document).off('change', '#'+this.eventCahngeCabinTypesAdditionalParamatrs[i]);
+				$(document).off('change', `#${this.eventCahngeCabinTypesAdditionalParamatrs[i]}`);
 			}
 
 			this.eventCahngeCabinTypesAdditionalParamatrs = [];
@@ -935,7 +676,7 @@
 				let $row = $('<div class="row">');
 				$mainRowColumn1.append($row);
 				
-				$('#'+_stepId).append($mainRow);
+				$(`#${_stepId}`).append($mainRow);
 				
 				element.items.forEach(function(item, index){											
 					let $radioItemDiv = $('<div class="image-radio-item custom-control custom-radio col-12 my-1 mx-0">');
@@ -946,8 +687,12 @@
 					}
 					
 					$radioItemDiv
-					.append('<input id="'+item.id+'" type="radio" class="custom-control-input" name="'+element.id+'" '+chackedAtr+' step-id="'+_stepId+'"/>')
-					.append('<label for="'+item.id+'" class="custom-control-label sliding-door-type-label"><div class="row m-0"><h7 class="blue-text left ml-1">'+item.title+'</h7></div><img for="'+item.id+'" class="custom-control-label sliding-door-type-img img-fluid" src="img/slidingDoorTypes/'+item.number+'.png" alt="'+item.number+'"/></label>');
+					.append(`<input id="${item.id}" type="radio" class="custom-control-input" name="${element.id}" ${chackedAtr} step-id="${_stepId}"/>`)
+					.append(`<label for="${item.id
+					        }" class="custom-control-label sliding-door-type-label"><div class="row m-0"><h7 class="blue-text left ml-1">${item.title
+					        }</h7></div><img for="${item.id
+					        }" class="custom-control-label sliding-door-type-img img-fluid" src="img/slidingDoorTypes/${item.number}.png" alt="${item.number
+					        }"/></label>`);
 					
 					if (item.info !== undefined){
 						let toolTip = currentOrderStep.renderToolTip(item.info);
@@ -983,7 +728,7 @@
 				let $row = $('<div class="row">');
 				$mainRowColumn1.append($row);
 				
-				$('#'+_stepId).append($mainRow);
+				$(`#${_stepId}`).append($mainRow);
 				
 				element.items.forEach(function(item, index){											
 					let $radioItemDiv = $('<div class="image-radio-item custom-control custom-radio col-12 my-1 mx-0">');
@@ -994,8 +739,11 @@
 					}
 					
 					$radioItemDiv
-					.append('<input id="'+item.id+'" type="radio" class="custom-control-input" name="'+element.id+'" '+chackedAtr+' step-id="'+_stepId+'"/>')
-					.append('<label for="'+item.id+'" class="custom-control-label swing-door-type-label"><div class="row m-0"><h7 class="blue-text left ml-1">'+item.title+'</h7></div><img for="'+item.id+'" class="custom-control-label swing-door-type-img img-fluid" src="img/swingDoorsTypes/'+item.number+'.png" alt="'+item.number+'"/></label>');
+					.append(`<input id="${item.id}" type="radio" class="custom-control-input" name="${element.id}" ${chackedAtr} step-id="${_stepId}"/>`)
+					.append(`<label for="${item.id
+					        }" class="custom-control-label swing-door-type-label"><div class="row m-0"><h7 class="blue-text left ml-1">${item.title
+					        }</h7></div><img for="${item.id}" class="custom-control-label swing-door-type-img img-fluid" src="img/swingDoorsTypes/${item.number
+					        }.png" alt="${item.number}"/></label>`);
 					
 					if (item.info !== undefined){
 						let toolTip = currentOrderStep.renderToolTip(item.info);
@@ -1011,10 +759,13 @@
 	}; 
 	
 	let stepsRenderHelper = {
-		init: function(orderStepsHelper, orderSteps, calculationHelper){
+		init: function(orderStepsHelper, orderSteps, calculationHelper, railAndSocketStep){
 			_orderStepsHelper = orderStepsHelper;
 			_orderSteps = orderSteps;
+			_railAndSocketStep = railAndSocketStep;
 			_calculationHelper = calculationHelper;
+			
+			_railAndSocketStep.init(orderStep, _orderStepsHelper, _calculationHelper);
 		},
 		createStep: function(step){
 			orderStep.createStep(step);
@@ -1059,11 +810,12 @@
 			orderStep.removeRadioEventAppendSizeElements();				
 			orderStep.removeIputPanelSizeEventOutElements();
 			
-			orderStep.removeEventInputInstallationOfRails();
-			orderStep.removeEventInstallationOfRailsElements();
+			_railAndSocketStep.removeEventInputInstallationOfRails();
+			_railAndSocketStep.removeEventInstallationOfRailsElements();
 			
-			orderStep.removeEventInputSocketsCount();
-			orderStep.removeSocketsCountElements();
+            _railAndSocketStep.removeSocketsCountElements();
+            _railAndSocketStep.removeSocketsBlockElements();
+            _railAndSocketStep.removeEventInputSocketsCount();
 			
 			orderStep.removeEventRadioHandleTypesElements();
 			

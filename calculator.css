@@ -63,8 +63,13 @@ color: inherit;
 	height: 240px;
 }
 
-.sliding-door-type-img{
-	width: 110px;
+.socket-img {
+    width: 40px;
+    height: 42px;
+}
+
+.sliding-door-type-img {
+    width: 110px;
     height: 150px;
 }
 
@@ -97,13 +102,33 @@ color: inherit;
   transition: 500ms all;
 }
 
+.image-checkbox-item .custom-control-label::before{
+    display:none !important;
+}
 
+.image-checkbox-item.custom-checkbox input[type=checkbox]:checked + label {
+    border: 1px solid #fff;
+    box-shadow: 0 0 3px 3px #007bff;
+}
 
-.order-step-radio{
+.image-checkbox-item.custom-checkbox input[type=checkbox] + label {
+    border: 1px dashed #e6e6e6;
+    transition: 500ms all;
+}
+
+.socket-checkbox-label {
+    width: 208px;
+}
+
+.sockets-count-blok {
 }
 
 .numberInput{
 	width:100px;
+}
+
+.small-numberInput { 
+    width: 40px; 
 }
 
 .left{

@@ -1,5 +1,5 @@
-<!doctype html>
-<html lang="en">
+﻿<!doctype html>
+<html>
   <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -21,8 +21,6 @@
 		<!--
 		<div>
 			<h6>Спросить про:</h6>
-			<h6>* С рисунком, инфо - 123</h6>
-			<h6>* В "Вид петель" - инфо без текста</h6>
 			<h6>* Картинки содержат водные знаки - но если их уменьшить то может и не замтно...</h6>
 			<h6>* Тип кабины, размер -> Тип перегородки: Название</h6>
 		</div>
@@ -37,12 +35,13 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
 	<script src="calculatorConsts.js" type="text/javascript"></script>
+	<script src="railAndSocketStep.js" type="text/javascript"></script>
 	<script src="orderStep.js" type="text/javascript"></script>
 	<script src="orderSteps.js" type="text/javascript"></script>	
 	<script src="calculator.js" type="text/javascript"></script>	
 	<script type="text/javascript">
 		$(function(){
-			calculatorModule.init(calculatorConstsModule, orderStepsModule, orderStepModule);
+			calculatorModule.init(calculatorConstsModule, orderStepsModule, orderStepModule, railAndSocketStepModule);
 		});
 	</script>
   </body>
