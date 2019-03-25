@@ -136,7 +136,8 @@
 					id:`element-1-${stepId}`,
 					items: [{
 							id:`item-31-${stepId}`,
-							title:'Обычное',
+                            title: 'Обычное',
+                            isSelected: true,
 							price: calculatorConstsHelper.SKINALI_NORMAL_GLASSTYPE_PRICE,
 							info:'Имеет в срезе зеленоватый оттенок. Данный зеленоватый оттенок может искажать цвет нанесенного на стекла изображения фотопечати или иным способом нанесенных изображений'
 						},
