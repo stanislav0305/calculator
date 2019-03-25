@@ -587,16 +587,17 @@
 						{
 							id:'item-29',
 							title:'Скинали',
-							isSelected:true,							
+							isSelected:true,
 							childSteps:[
 								glassType2Step('step-30'),
 								printingTypeStep('step-33',calculatorConstsHelper.SKINALI_PHOTO_PRINTING_PRICE, calculatorConstsHelper.SKINALI_MONOCHROMATIC_PAINTING_PRICE),
 								{
-									id:'step-39',
+									id:'step-panel-size',
 									title:'Количество панелей / размер',
 									mainParamsCalcFunc:'panelSizeMainParamsCalc',
 									calcFunc:'panelSizeCalc',
 									doubleWidthSize:true,
+									stopRender:true,
 									stepElements:[
 										{
 											id:'element-40',
@@ -623,27 +624,27 @@
 											enteredValues:[
 												{
 													number:1,
-													w:'',
-													h:'',
-													hardening:false
+													w: undefined,
+                                                    h: undefined,
+                                                    hardening: false
 												},
 												{
 													number:2,
-													w:'',
-													h:'',
-													hardening:false
+                                                    w: undefined,
+                                                    h: undefined,
+                                                    hardening: false
 												},
 												{
 													number:3,
-													w:'',
-													h:'',
-													hardening:false
+                                                    w: undefined,
+                                                    h: undefined,
+                                                    hardening: false
 												},
 												{
 													number:4,
-													w:'',
-													h:'',
-													hardening:false
+                                                    w: undefined,
+                                                    h: undefined,
+                                                    hardening: false
 												}
 											]
 										}

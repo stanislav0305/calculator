@@ -178,6 +178,7 @@
 					let element = _orderStepsHelper.getStepElementOrNull(step, elementId);
 					_orderStepsHelper.unselectElementItems(element.items);
 					_orderStepsHelper.selectElementItem(element.items, itemId);
+					
 					stepsRenderHelper.clearSteps();
 					stepsRenderHelper.renderAllSteps();
 				}
@@ -210,20 +211,12 @@
 		},
 		
 		renderRadioAppendSize:function(element){
-			let currentOrderStep = this;
-								
 			if (element.title !== undefined){
-				currentOrderStep.renderElementTitle(element.title, element.info);
+				orderStep.renderElementTitle(element.title, element.info);
 			}
 			
 			if (element.items !== undefined){				
-				let $container = $('<div class="container mb-4 px-0">');
-				let $row = $('<div class="row">');
-				let $radio = $(`<div id="${element.id}" class="col-1 mr-4 mt-4">`);
-				$radio.appendTo($row);
-				
-				$container.append($row);
-				$(`#${_stepId}`).append($container);
+				let $radio = $(`<div id="${element.id}" class="col-1 mr-4 mt-1">`);
 				
 				element.items.forEach(function(item, index){							
 					let radioItemDiv = $('<div class="custom-control custom-radio">');
@@ -231,15 +224,38 @@
 					radioItemDiv.append(`<input id="${item.id}" type="radio" class="custom-control-input" name="${element.id}" ${chackedAtr} step-id="${_stepId}"/>`).append(`<label for="${item.id}" class="custom-control-label">${item.title}</label>`);
 					
 					if (item.info !== undefined){
-						let toolTip = currentOrderStep.renderToolTip(item.info);
+						let toolTip = orderStep.renderToolTip(item.info);
 						radioItemDiv.append(toolTip);
 					}
 					
 					$radio.append(radioItemDiv);
 				});
-
-				currentOrderStep.renderPanelSizeElementRows(element, 1, _stepId);
-				currentOrderStep.radioSetEvents(element);
+				
+				$(`#${_stepId}`)
+					.append(
+						$('<div class="container mb-4 px-0">')
+						.append(
+							$('<div class="row">')
+								.append(
+									$radio
+								)
+						)
+						.append(
+							$('<div class="row">')
+								.append(
+									$('<div class="col-12">')
+										.append(
+											$(`<button id="panelSizeContinueBtn" type="button" class="btn btn-outline-primary btn-sm float-right" step-id="${_stepId}">`)
+											.text("Продолжить")
+										)
+								)
+						)
+					);
+				
+				let selectedItemIdx = element.items.findIndex(item => item.isSelected === true);
+				orderStep.renderPanelSizeElementRows(element, element.items[selectedItemIdx].title*1, _stepId);
+				orderStep.radioSetEvents(element);
+				orderStep.setPanelSizeContinueBtnEvent();
 			}
 		},
 		readioIdsWithEventAppendSizeElements:[],
@@ -261,10 +277,16 @@
 					_orderStepsHelper.selectElementItem(element.items, itemId);
 					
 					orderStep.removePanelSizeElementRows(radioId);
-					orderStep.renderPanelSizeElementRows(element, panelCount, stepId);
+					orderStep.renderPanelSizeElementRows(element, panelCount*1, stepId);
+					
+					//stepsRenderHelper.clearSteps();
+					//stepsRenderHelper.renderAllSteps();
+					
+					_calculationHelper.recalcAll();
+				
+					stepsRenderHelper.clearSteps();
+					stepsRenderHelper.renderAllSteps();
 				}
-				
-				
 			});
 		},
 		removeRadioEventAppendSizeElements:function(){
@@ -275,6 +297,22 @@
 			this.readioIdsWithEventAppendSizeElements = [];
 		},
 		
+		panelSizeContinueBtnEvent: 'panelSizeContinueBtn',
+		setPanelSizeContinueBtnEvent: function(){
+			$(document).on('click', `#${orderStep.panelSizeContinueBtnEvent}`, function () {
+				//let stepId = $(this).attr('step-id');
+				
+				//let step = _orderStepsHelper.getStepOrNull(stepId);
+				_calculationHelper.recalcAll();
+				
+				stepsRenderHelper.clearSteps();
+			    stepsRenderHelper.renderAllSteps();
+				
+			});
+		},
+		removePanelSizeContinueBtnEventEvent: function(){
+			$(document).off('click', `#${orderStep.panelSizeContinueBtnEvent}`);
+		},
 		
 		renderPanelSizeElementRows: function(element, elementsGroupRowCount, stepId){
 			let elementId = element.id;
@@ -283,38 +321,41 @@
 			
 			let sizeElementGroup = $(`<div id="${sizeElementGroupId}" class="col right">`);
 			sizeElementGroup.appendTo($container);
-						
+			
 			$('<h8 class="card-subtitle mb-2 text-muted">Размер:</div>')
 			.appendTo(sizeElementGroup);
 			
 			var $elementsGroupRowContainer = $('<div class="container">');
 			for(let i=1; i < (elementsGroupRowCount*1+1); i++){
 				let enteredVal = element.enteredValues[i*1-1];
-				let isHardenedChecked = enteredVal.hardening === true ? 'checked' : '';
+                let isHardenedChecked = enteredVal.hardening === true ? 'checked' : '';
+			    let hInvalidClass = (enteredVal.h === '') ? 'is-invalid' : '';
+			    let wInvalidClass = (enteredVal.w === '') ? 'is-invalid' : '';
+
 				$('<div class="row mt-1 ml-0 mb-0 mr-0">')
 				.append(
 					$('<div class="col-5 p-0">')
 						.append($('<lebel>').text(`Высота ${i}`))
 						.append(
-							$(`<input type="number" class="numberInput ml-1" step-id="${stepId}" element-id="${elementId}" it-is="height" size-number="${enteredVal.number}" min="1" max="99999">`)
+                    $(`<input type="number" class="numberInput ml-1 d-inline-block form-control form-control-sm ${hInvalidClass}" step-id="${stepId}" element-id="${elementId}" it-is="height" size-number="${enteredVal.number}" min="1" max="99999">`)
 							.val(enteredVal.h)
 						)
-						.append($('<lebel class="blue-text">').text('мм'))
+						.append($('<lebel class="blue-text ml-1">').text('мм'))
 				)
 				.append(
 				$('<div class="col-5 p-0">')
 					.append($('<lebel class="ml-1">').text(`Длина ${i}`))
 					.append(
-						$(`<input type="number" class="numberInput ml-1" step-id="${stepId}" element-id="${elementId}" it-is="width" size-number="${enteredVal.number}" min="1" max="99999">`)
+                    $(`<input type="number" required class="numberInput ml-1 d-inline-block form-control form-control-sm ${wInvalidClass}" step-id="${stepId}" element-id="${elementId}" it-is="width" size-number="${enteredVal.number}" min="1" max="99999">`)
 						.val(enteredVal.w)
 					)
-					.append($('<lebel class="blue-text">').text('мм'))
+					.append($('<lebel class="blue-text ml-1">').text('мм'))
 				)
 				.append(
 				$('<div class="col-2 p-0">')
 					.append(
 						$('<div class="custom-control custom-checkbox">')
-							.append(`<input id="hardening-${enteredVal.number}" class="custom-control-input" type="checkbox" step-id="${stepId}" element-id="${elementId
+							.append(`<input id="hardening-${enteredVal.number}" class="d-inline-block custom-control-input" type="checkbox" required step-id="${stepId}" element-id="${elementId
 						    }" it-is="hardening" size-number="${enteredVal.number}" ${isHardenedChecked}>`)
 							.append(`<label class="custom-control-label" for="hardening-${enteredVal.number}">Закалка</label>`)
 					)
@@ -340,7 +381,8 @@
 				let stepId = $(this).attr('step-id');
 				let elementId = $(this).attr('element-id');
 				let sizeNumber = $(this).attr('size-number');
-				let valueType = $(this).attr('it-is');
+                let valueType = $(this).attr('it-is');
+
 				let val;
 				if (valueType === 'hardening'){
 					val = $(this).is(':checked');
@@ -418,6 +460,8 @@
 				
 				_orderStepsHelper.unselectElementItems(element.items);
 				let selectedItem = _orderStepsHelper.selectElementItem(element.items, itemId);
+				
+				_calculationHelper.recalcAll();
 			});
 		},
 		removeEventRadioHandleTypesElements:function(){
@@ -588,6 +632,7 @@
 				_orderStepsHelper.unselectElementItems(element.items);
 				let selectedItem = _orderStepsHelper.selectElementItem(element.items, itemId);
 				
+				_calculationHelper.recalcAll();
 			    stepsRenderHelper.clearSteps();
 			    stepsRenderHelper.renderAllSteps();
 			});
@@ -621,6 +666,7 @@
 				let element = _orderStepsHelper.getStepElementOrNull(setp, elementId);
 				
 				_orderStepsHelper.saveCabinTypesSize(element, itemId, _sizeName, this.value);
+				_calculationHelper.recalcAll();
 			});
 		},
 		removeEventFocusOutCabinTypeSize(){
@@ -645,6 +691,8 @@
 				
 				_orderStepsHelper.unselectCabinTypesAdditionalParamatr(element, itemId, additionalParamatresId);
 				_orderStepsHelper.saveCabinTypesAdditionalParamatr(element, itemId, additionalParamatresId, additionalItemId);
+				
+				_calculationHelper.recalcAll();
 			});
 		},
 		removeEventCahngeCabinTypesParametrs(){
@@ -776,29 +824,40 @@
 		removeTooltipeEvents: function(){
 			$('[data-toggle="tooltip"]').off('.tooltip');
 		},
+		stopRenderSteps:undefined,
 		renderSteps: function(steps){
 			if (steps === undefined){
 				return;
 			}
 			
 			let _this = this;
-			steps.forEach(function(step, index){
+			for(let sIdx=0; sIdx < steps.length; sIdx++){
+				let step = steps[sIdx];				
 				orderStep.createStep(step);
 				
-				if ($.isArray(step.stepElements)){
-					step.stepElements.forEach(function(stepElement, index){
-						if (stepElement.items !== undefined){
-							stepElement.items.forEach(function(item, index){
-								if (item.isSelected === true){
-									_this.renderSteps(item.childSteps);
-								}
-							});
-						}
-					});
+				orderStep.stopRenderSteps = step.stopRender;
+				if (orderStep.stopRenderSteps === true){
+					return;
 				}
-			});
+				
+				if ($.isArray(step.stepElements)){
+					for(let seIdx=0; seIdx < step.stepElements.length; seIdx++){
+						let stepElement = step.stepElements[seIdx];
+						if (stepElement.items !== undefined){
+							let i = stepElement.items.findIndex(item => item.isSelected === true);
+							if (i >= 0){
+								_this.renderSteps(stepElement.items[i].childSteps);
+								if (orderStep.stopRenderSteps === true){
+									return;
+								}
+							}
+						}
+					}
+				}
+			}
 		},
 		renderAllSteps: function(){
+			orderStep.stopRenderSteps = undefined;
 			this.renderSteps(_orderSteps);
 			this.setTooltipeEvents();
 			
@@ -809,6 +868,7 @@
 			orderStep.removeRadioEventRefreshSteps();
 			orderStep.removeRadioEventAppendSizeElements();				
 			orderStep.removeIputPanelSizeEventOutElements();
+			orderStep.removePanelSizeContinueBtnEventEvent();
 			
 			_railAndSocketStep.removeEventInputInstallationOfRails();
 			_railAndSocketStep.removeEventInstallationOfRailsElements();
