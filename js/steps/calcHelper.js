@@ -197,8 +197,9 @@
 			let panelCount = selectedItem.title * 1;
 			let enteredValuesList = step.stepElements[0].enteredValues.filter(item => item.number <= panelCount);
             let hardeningTotal = 0.00;
+		    let grindingTotal = 0.00;
 
-		    logger.log(`Шаг "${step.title}"`);
+            logger.log(`Шаг "${step.title}"`);
 			enteredValuesList.forEach(function(enteredSizes, index) {
 
 				if (enteredSizes.w === undefined ||
@@ -209,7 +210,8 @@
 					return;
 				} else {
                     let panelAreaSize = enteredSizes.w / 1000 * enteredSizes.h / 1000;
-				    
+				    let panelPerimeter = (enteredSizes.w / 1000 + enteredSizes.h / 1000) * 2;
+
 				    if (panelAreaSize < calculatorConfig.SKINALI_PANEL_MIN_AREA_IN_SQUARE_METERS) {
                         panelAreaSize = calculatorConfig.SKINALI_PANEL_MIN_AREA_IN_SQUARE_METERS;
                         logger.log(`площдь панели${index + 1} (площадь < ${calculatorConfig.SKINALI_PANEL_MIN_AREA_IN_SQUARE_METERS}) = ${panelAreaSize}`);
@@ -223,27 +225,34 @@
                         hardeningTotal = hardeningTotal + hardening;
                     }
 
-				    logger.log(`закалка панели${index + 1} = площядь панели${index + 1}(${panelAreaSize}) * цену(${calculatorConfig.SKINALI_PANEL_HARDENING_PRICE}) = ${hardening}`);
+                    logger.log(`закалка панели${index + 1} = площядь панели${index + 1}(${panelAreaSize}) * цену(${calculatorConfig.SKINALI_PANEL_HARDENING_PRICE}) = ${hardening}`);
+
+				    // если величина погонного метра (периметр) > 2 метров то цена за погонного метра (периметр) увеличивается на 25%
+				    // если величина погонного метра (периметр) > 3 метров то цена за погонного метра (периметр) увеличивается на 50%
+                    let grinGrindingPrice = calculatorConfig.SKINALI_PANEL_GRINDING_PRICE;
+
+				    if ((enteredSizes.w / 1000 > 3) || (enteredSizes.h / 1000 > 3)) {
+				        grinGrindingPrice = grinGrindingPrice + (grinGrindingPrice * 50 / 100);
+				        logger.log(`Для панели${index + 1} цена за шлифовку 1 метра(${calculatorConfig.SKINALI_PANEL_GRINDING_PRICE}) + 50% = ${grinGrindingPrice}`);
+				    } else if ((enteredSizes.w / 1000 > 2 && enteredSizes.w / 1000 <= 3)
+                    || (enteredSizes.h / 1000 > 2 && enteredSizes.h / 1000 <= 3)) {
+				        grinGrindingPrice = grinGrindingPrice + (grinGrindingPrice * 25 / 100);
+                        logger.log(`Для панели${index + 1 } цена за шлифовку 1 метра(${calculatorConfig.SKINALI_PANEL_GRINDING_PRICE}) + 25% = ${grinGrindingPrice}`);
+                    } else {
+                        logger.log(`Для панели${index + 1 } цена за шлифовку 1 метра(${calculatorConfig.SKINALI_PANEL_GRINDING_PRICE}) = ${grinGrindingPrice}`);
+                    }
+
+				    let grinding = panelPerimeter * grinGrindingPrice;
+                    logger.log(`шлифовка панели${index + 1} = периметр(погоных метров) панели(${panelPerimeter}) * цена шлифовки(${grinGrindingPrice}) = ${grinding}`)
+
+                    grindingTotal = grindingTotal + grinding;
 				}
 			});
 
-			// если величина погонного метра (периметр) > 2 метров то цена за погонного метра (периметр) увеличивается на 25%
-			// если величина погонного метра (периметр) > 3 метров то цена за погонного метра (периметр) увеличивается на 50%
-			let grinGrindingPrice = calculatorConfig.SKINALI_PANEL_GRINDING_PRICE;
-			if (module.mainParams.perimeterSize > 2) {
-                grinGrindingPrice = grinGrindingPrice + (grinGrindingPrice * 25 / 100);
-                logger.log(`цена за шлифовку 1 метра для (${calculatorConfig.SKINALI_PANEL_GRINDING_PRICE}) + 25% = ${grinGrindingPrice}`);
-			} else if (module.mainParams.perimeterSize > 3) {
-                grinGrindingPrice = grinGrindingPrice + (grinGrindingPrice * 50 / 100);
-                logger.log(`цена за шлифовку 1 метра(${calculatorConfig.SKINALI_PANEL_GRINDING_PRICE}) + 50% = ${grinGrindingPrice}`);
-		    } else {
-                logger.log(`цена за шлифовку 1 метра(${calculatorConfig.SKINALI_PANEL_GRINDING_PRICE}) = ${grinGrindingPrice}`);
-		    }
-
-		    let grindingTotal = module.mainParams.perimeterSize * grinGrindingPrice;
-            let totalSum = hardeningTotal + grindingTotal;
             logger.log(`всего за шлифовку = ${grindingTotal}`);
             logger.log(`всего за закалку = ${hardeningTotal}`);
+
+            let totalSum = hardeningTotal + grindingTotal;
             logger.log(`сумма = ${totalSum}`);
             logger.line();
 
