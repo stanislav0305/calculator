@@ -1,4 +1,4 @@
-logerModule = (function() {
+loggerModule = (function() {
     let calculatorConfig;
 
     let module = {

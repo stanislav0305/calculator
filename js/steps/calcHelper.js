@@ -3,7 +3,7 @@
 	let calculatorConfig;
 	let orderStepsHelper;
     let numberHelper;
-    let loger;
+    let logger;
 
 	let module = 
 	{
@@ -11,7 +11,7 @@
 			areaSize: 0.00,
 			perimeterSize: 0.00,
 			drillingCount: 0,
-			calc: function(steps) {
+            calc: function (steps) {
 				if (steps === undefined) {
 					return;
 				}
@@ -19,10 +19,6 @@
 				let _this = this;
 				for (let sIdx = 0; sIdx < steps.length; sIdx++) {
 					let step = steps[sIdx];
-					//steps.forEach(function(step, index){
-					//if (step.mainParamsCalcFunc === 'printingTypeMainParamsCalc'){
-					//	_this.printingTypeMainParamsCalc(step);
-					//} else 
 					if (step.mainParamsCalcFunc === 'panelSizeMainParamsCalc') {
 						_this.panelSizeMainParamsCalc(step);
 					}
@@ -30,19 +26,17 @@
 					if ($.isArray(step.stepElements)) {
 						for (let seIdx = 0; seIdx < step.stepElements.length; seIdx++) {
 							let stepElement = step.stepElements[seIdx];
-							//step.stepElements.forEach(function(stepElement, index){
 							if (stepElement.items !== undefined) {
 								for (let iIdx = 0; iIdx < stepElement.items.length; iIdx++) {
 									let item = stepElement.items[iIdx];
-									//stepElement.items.forEach(function(item, index){
 									if (item.isSelected === true) {
 										_this.calc(item.childSteps);
 									}
-								} //);
+								}
 							}
-						} //);
+						}
 					}
-				} //);
+				}
 			},
 			panelSizeEnteredSizeMap: function (enteredSizes) {
 				enteredSizes.w = (enteredSizes.w === undefined) ? '' : enteredSizes.w;
@@ -82,47 +76,56 @@
 					} else {
 						let panelAreaSize = enteredSizes.w / 1000 * enteredSizes.h / 1000;
 						if (panelAreaSize < calculatorConfig.SKINALI_PANEL_MIN_AREA_IN_SQUARE_METERS) {
-							panelAreaSize = calculatorConfig.SKINALI_PANEL_MIN_AREA_IN_SQUARE_METERS;
+                            panelAreaSize = calculatorConfig.SKINALI_PANEL_MIN_AREA_IN_SQUARE_METERS;
+                            logger.log(`- размер панели${evIdx + 1} < ${calculatorConfig.SKINALI_PANEL_MIN_AREA_IN_SQUARE_METERS}`);
 						}
-
-						module.mainParams.areaSize =
-							module.mainParams.areaSize + panelAreaSize;
-						module.mainParams.perimeterSize = module.mainParams.perimeterSize +
-							(enteredSizes.w / 1000 + enteredSizes.h / 1000) * 2;
+                        logger.log(`- размер панели${evIdx + 1} = ${panelAreaSize} M в квадрате`);
+						module.mainParams.areaSize = module.mainParams.areaSize + panelAreaSize;
+						module.mainParams.perimeterSize = module.mainParams.perimeterSize + (enteredSizes.w / 1000 + enteredSizes.h / 1000) * 2;
 
 						//цена за высверливание 1 отверстия в панелей (количество отверстий в одной панели = 1 + (целое число от длинна панели в метрах, если оно равно 0 то 1))
 						let w = Math.trunc(enteredSizes.w / 1000);
-						w = w <= 0 ? 1 : w;
-						module.mainParams.drillingCount =
-							module.mainParams.drillingCount + (1 + w);
+                        if (w <= 0) {
+                            w = 1;
+                            logger.log(`- длинна панели${evIdx + 1} < 1 метра, длина = 1 для ращёта колличество высверливание`);
+                        }
+                        logger.log(`- колличество высверливаний для панели${evIdx + 1} = ${(1 + w)}`);
+                        module.mainParams.drillingCount = module.mainParams.drillingCount + (1 + w);
+					    logger.line();
 					}
-				}
+                }
+
+                logger.log('* Сумма полощядей всех панелей:' + module.mainParams.areaSize + ' M в квадрате');
+                logger.log('* Сумма периметров(всего погоных метров) всех панелей:' + module.mainParams.areaSize + ' M');
+                logger.log('* Всего необходимо высверлить отверстий:' + module.mainParams.drillingCount);
+			    logger.line();
 			}
-			/*,				
-			printingTypeMainParamsCalc: function(step){
-				let selectedItem = step.stepElements[0].items.filter(item => item.isSelected === true)[0];
-				if (selectedItem.price !== undefined){
-					module.mainParams.printingTypePrice = selectedItem.price;
-				}
-			} */
 		},
 
 
 		defaultCalc: function(step) {
-			let selectedItem = step.stepElements[0].items.filter(item => item.isSelected === true)[0];
-			if (selectedItem.price !== undefined) {
-				return selectedItem.price;
+            let selectedItem = step.stepElements[0].items.filter(item => item.isSelected === true)[0];
+		    let result = 0.00;
+            if (selectedItem.price !== undefined) {
+                result = selectedItem.price;
 			}
 
-			return 0.00;
+            logger.log(`Шаг "${step.title}" = ${result}`);
+		    logger.line();
+			return result;
 		},
 		priceMultiplyByAreaSizeCalc: function(step) {
-			let selectedItem = step.stepElements[0].items.filter(item => item.isSelected === true)[0];
+            let selectedItem = step.stepElements[0].items.filter(item => item.isSelected === true)[0];
+            let result = 0.00;
+
 			if (selectedItem !== undefined && selectedItem.price !== undefined) {
-				return module.mainParams.areaSize * selectedItem.price;
+			    result = module.mainParams.areaSize * selectedItem.price;
 			}
 
-			return 0.00;
+            logger.log(`Шаг "${step.title} - ${selectedItem.title}" площядь(${module.mainParams.areaSize}) * цена(${selectedItem.price}) = ${result}`);
+            logger.line();
+
+		    return result;
 		},
 		railsAndSocketsCalc: function(step) {
 			let countToPriceCalc = function(price, count) {
@@ -134,15 +137,20 @@
 			}
 
 			//Rails calc
-			let railSelectedItem = step.stepElements[0].items.filter(item => item.isSelected === true)[0];
-			let result = countToPriceCalc(railSelectedItem.price, railSelectedItem.enteredValue);
+            let railSelectedItem = step.stepElements[0].items.filter(item => item.isSelected === true)[0];
+		    let railingCount = railSelectedItem.enteredValue === undefined ? 0 : railSelectedItem.enteredValue;
+            let result = countToPriceCalc(calculatorConfig.SKINALI_ONE_RAILS_INSTALATION_PRICE, railSelectedItem.enteredValue);
+		    
+		    logger.log(`Шаг "${step.title}`);
+            logger.log(`колличество рейлингов(${railingCount}) * цена монтажа 1 рейлинга(${calculatorConfig.SKINALI_ONE_RAILS_INSTALATION_PRICE}) = ${result}`);
 
 			//Sockets calc
-			let socketDataIsValid = true;
-			let socketSelectedItem = step.stepElements[1].items.filter(item => item.isSelected === true)[0];
+            let socketDataIsValid = true;
+            let socketTotalPrice = 0.00;
+		    let socketCount = 0;
+			//let socketSelectedItem = step.stepElements[1].items.filter(item => item.isSelected === true)[0];
+		    let socketSelectedItem = step.stepElements[0].items.filter(item => item.isSelected === true)[0];
 			if (socketSelectedItem.socketsBloks != undefined) {
-
-				let socketCount = 0;
 				for (let i = 0; i < socketSelectedItem.socketsBloks.length; i++) {
 					if (socketSelectedItem.socketsBloks[i].isSelected === true) {
 						if (socketSelectedItem.socketsBloks[i].blockCount === '' ||
@@ -155,30 +163,42 @@
 								socketSelectedItem.socketsBloks[i].number;
 						}
 					}
-				}
+                }
 
-				result = result + socketCount * calculatorConfig.SKINALI_ONE_SOCKET_DRILLING_PRICE;
-			}
+			    socketTotalPrice = socketCount * calculatorConfig.SKINALI_ONE_SOCKET_DRILLING_PRICE;
+            }
+
+            logger.log(`колличество выпилов под резетки(${socketCount}) * цена выпила(${calculatorConfig.SKINALI_ONE_SOCKET_DRILLING_PRICE}) = ${socketTotalPrice}`);
+
+		    result = result + socketTotalPrice;
+            logger.log(`сумма:${result}`);
+            logger.line();
 
 			return result;
 		},
 		mountingTypeCalc: function(step) {
-			let selectedItem = step.stepElements[0].items.filter(item => item.isSelected === true)[0];
-			if (selectedItem !== undefined && selectedItem.itemType === 'glue') {
-				return calculatorConfig.SKINALI_GLUE_PRICE;
-			} else if (selectedItem !== undefined && selectedItem.itemType === 'drilling') {
-				return module.mainParams.drillingCount *
-					calculatorConfig.SKINALI_ONE_HOLE_DRILLING_PRICE;
-			}
+            let selectedItem = step.stepElements[0].items.filter(item => item.isSelected === true)[0];
+		    let result = 0.00;
 
-			return 0.00;
+			if (selectedItem !== undefined && selectedItem.itemType === 'glue') {
+                result = calculatorConfig.SKINALI_GLUE_PRICE;
+                logger.log(`Шаг "${step.title} - клей" цена за клей (${calculatorConfig.SKINALI_GLUE_PRICE}) = ${result}`);
+			} else if (selectedItem !== undefined && selectedItem.itemType === 'drilling') {
+                result = module.mainParams.drillingCount * calculatorConfig.SKINALI_ONE_HOLE_DRILLING_PRICE;
+                logger.log(`Шаг "${step.title} - сквозное" колличество отверстий(${module.mainParams.drillingCount}) * цена(${calculatorConfig.SKINALI_ONE_HOLE_DRILLING_PRICE}) = ${result}`);
+            }
+
+            logger.line();
+
+            return result;
 		},
 		panelSizeCalc: function(step) {
 			let selectedItem = step.stepElements[0].items.filter(item => item.isSelected === true)[0];
 			let panelCount = selectedItem.title * 1;
 			let enteredValuesList = step.stepElements[0].enteredValues.filter(item => item.number <= panelCount);
+            let hardeningTotal = 0.00;
 
-			let hardeningTotal = 0.00;
+		    logger.log(`Шаг "${step.title}"`);
 			enteredValuesList.forEach(function(enteredSizes, index) {
 
 				if (enteredSizes.w === undefined ||
@@ -188,15 +208,22 @@
 					hardeningTotal = 0.00;
 					return;
 				} else {
-					let panelAreaSize = enteredSizes.w / 1000 * enteredSizes.h / 1000;
-					if (panelAreaSize < calculatorConfig.SKINALI_PANEL_MIN_AREA_IN_SQUARE_METERS) {
-						panelAreaSize = calculatorConfig.SKINALI_PANEL_MIN_AREA_IN_SQUARE_METERS;
-					}
+                    let panelAreaSize = enteredSizes.w / 1000 * enteredSizes.h / 1000;
+				    
+				    if (panelAreaSize < calculatorConfig.SKINALI_PANEL_MIN_AREA_IN_SQUARE_METERS) {
+                        panelAreaSize = calculatorConfig.SKINALI_PANEL_MIN_AREA_IN_SQUARE_METERS;
+                        logger.log(`площдь панели${index + 1} (площадь < ${calculatorConfig.SKINALI_PANEL_MIN_AREA_IN_SQUARE_METERS}) = ${panelAreaSize}`);
+                    } else {
+                        logger.log(`площдь панели${index + 1} = ${panelAreaSize}`);
+				    }
 
-					if (enteredSizes.hardening === true) {
-						hardeningTotal =
-							hardeningTotal + panelAreaSize * calculatorConfig.SKINALI_PANEL_HARDENING_PRICE
-					}
+				    let hardening = 0.00;
+                    if (enteredSizes.hardening === true) {
+                        hardening = panelAreaSize * calculatorConfig.SKINALI_PANEL_HARDENING_PRICE;
+                        hardeningTotal = hardeningTotal + hardening;
+                    }
+
+				    logger.log(`закалка панели${index + 1} = площядь панели${index + 1}(${panelAreaSize}) * цену(${calculatorConfig.SKINALI_PANEL_HARDENING_PRICE}) = ${hardening}`);
 				}
 			});
 
@@ -204,16 +231,24 @@
 			// если величина погонного метра (периметр) > 3 метров то цена за погонного метра (периметр) увеличивается на 50%
 			let grinGrindingPrice = calculatorConfig.SKINALI_PANEL_GRINDING_PRICE;
 			if (module.mainParams.perimeterSize > 2) {
-				grinGrindingPrice = grinGrindingPrice + (grinGrindingPrice * 25 / 100);
+                grinGrindingPrice = grinGrindingPrice + (grinGrindingPrice * 25 / 100);
+                logger.log(`цена за шлифовку 1 метра для (${calculatorConfig.SKINALI_PANEL_GRINDING_PRICE}) + 25% = ${grinGrindingPrice}`);
 			} else if (module.mainParams.perimeterSize > 3) {
-				grinGrindingPrice = grinGrindingPrice + (grinGrindingPrice * 50 / 100);
-			}
+                grinGrindingPrice = grinGrindingPrice + (grinGrindingPrice * 50 / 100);
+                logger.log(`цена за шлифовку 1 метра(${calculatorConfig.SKINALI_PANEL_GRINDING_PRICE}) + 50% = ${grinGrindingPrice}`);
+		    } else {
+                logger.log(`цена за шлифовку 1 метра(${calculatorConfig.SKINALI_PANEL_GRINDING_PRICE}) = ${grinGrindingPrice}`);
+		    }
 
-			let grindingTotal = module.mainParams.perimeterSize *
-				calculatorConfig.SKINALI_PANEL_GRINDING_PRICE;
-			let totalSum = hardeningTotal + grindingTotal;
+		    let grindingTotal = module.mainParams.perimeterSize * grinGrindingPrice;
+            let totalSum = hardeningTotal + grindingTotal;
+            logger.log(`всего за шлифовку = ${grindingTotal}`);
+            logger.log(`всего за закалку = ${hardeningTotal}`);
+            logger.log(`сумма = ${totalSum}`);
+            logger.line();
+
 			return totalSum;
-		},
+        },
 
 
 		recalcSteps: function(steps, result) {
@@ -253,24 +288,24 @@
 			return result;
 		},
         recalcAll: function () {
-            loger.line();
-            loger.log('Расчёт суммы');
-            loger.line();
+            logger.line();
+            logger.log('Расчёт суммы');
+            logger.line();
 			this.mainParams.calc(orderSteps);
             let result = this.recalcSteps(orderSteps, 0);
 
-            loger.log('Сумма:' + result);
-            loger.line();
+            logger.log('И того сумма:' + result);
+            logger.line();
 
 			orderStep.setTotalPrice(result);
 		},
-		init: function(steps, orderStepsHelperModule, calculatorConfigModule, orderStepModule, numberHelperModule, logerModule){
+		init: function(steps, orderStepsHelperModule, calculatorConfigModule, orderStepModule, numberHelperModule, loggerModule){
 			orderSteps = steps;
 			orderStep = orderStepModule;
 			calculatorConfig = calculatorConfigModule;
             orderStepsHelper = orderStepsHelperModule;
             numberHelper = numberHelperModule;
-		    loger = logerModule;
+		    logger = loggerModule;
 		}
 	};
     	

@@ -30,41 +30,44 @@ const module = {
 	SKINALI_METRING_PRICE: 10.00,
 	
 	//цена доставки (с PVN)
-	SKINALI_DELIVERY_PRICE: 7.00,
+    SKINALI_DELIVERY_PRICE: 21.78,
 	
 	//цена монтажа за 1 квадратный метр (с PVN)
-	SKINALI_INSTALATION_PRICE: 10.00,
+    SKINALI_INSTALATION_PRICE: 20.57,
 	
 	//цена закалки панелей за 1 квадратный метр (с PVN)
-	SKINALI_PANEL_HARDENING_PRICE: 5.00,
+    SKINALI_PANEL_HARDENING_PRICE: 25.31,
 	
 	//цена шлифовки панелей за 1 погонный метр (за 1 метр периметра) (с PVN)
 	// если величина погонного метра (периметр) > 2 метров то цена за погонного метра (периметр) увеличивается на 25%
 	// если величина погонного метра (периметр) > 3 метров то цена за погонного метра (периметр) увеличивается на 50%
-	SKINALI_PANEL_GRINDING_PRICE: 9.00,
+    SKINALI_PANEL_GRINDING_PRICE: 2.13,
 
 	//цена фотопечаит за 1 квадратный метр (с PVN)
-	SKINALI_PHOTO_PRINTING_PRICE: 30.00,
+    SKINALI_PHOTO_PRINTING_PRICE: 45.19,
 	
 	//цена однотонной покраски за 1 квадратный метр (с PVN)
-	SKINALI_MONOCHROMATIC_PAINTING_PRICE: 20.00,
+    SKINALI_MONOCHROMATIC_PAINTING_PRICE: 29.87,
 	
 	//цена за 1 квадратный метр обычного стекла
-	SKINALI_NORMAL_GLASSTYPE_PRICE: 10.00,
+    SKINALI_NORMAL_GLASSTYPE_PRICE: 16.64,
 	
 	//цена за 1 квадратный метр осветлённого стекла
-	SKINALI_CLARIFIED_GLASSTYPE_PRICE: 100.00,
+    SKINALI_CLARIFIED_GLASSTYPE_PRICE: 32.54,
 	
 	//цена за высверливание 1 отверстия в панелей (количество отверстий в одной панели = 1 + (целое число от длинна панели в метрах, если оно равно 0 то 1))
-	SKINALI_ONE_HOLE_DRILLING_PRICE: 20.00,
+    SKINALI_ONE_HOLE_DRILLING_PRICE: 2.73,
 	
 	//цена за клей для всех панелей
-	SKINALI_GLUE_PRICE: 10.00,
+    SKINALI_GLUE_PRICE: 5.00,
 	
 	//цена за высверливание 1 отверстия под 1 резетку в 1 блоке резеток (это цена за 1 высвертивание, блок резеток требует несколько высверливаний)
-	SKINALI_ONE_SOCKET_DRILLING_PRICE: 1.00,
+    SKINALI_ONE_SOCKET_DRILLING_PRICE: 7.56,
 	
+    //цена монтажа 1 рейлинга
+	SKINALI_ONE_RAILS_INSTALATION_PRICE: 2.00,
 	
+
 	//-----------------------------
 	
 	

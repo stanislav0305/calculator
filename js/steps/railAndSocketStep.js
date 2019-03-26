@@ -32,10 +32,10 @@
 					$radio.append(radioItemDiv);
 				});
 
-				module.renderInputInstallationOfRails(element, stepId);
+				//module.renderInputInstallationOfRails(element, stepId);
 			    orderStepRender.radioSetEvents(element);
 			}
-		},
+        },
 		renderInputInstallationOfRails: function(element, stepId){
 			let elementId = element.id;
 			let $container = $(`#${elementId}`).parent();

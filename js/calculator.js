@@ -3,9 +3,9 @@
     let module = {
         init:
             function(calculatorConfigModule, orderStepsModule, orderStepsHelperModule, calcHelperModule, orderStepModule, railAndSocketStepModule,
-                panelSizeStepModule, numberHelperModule, logerModuel) {
+                panelSizeStepModule, numberHelperModule, loggerModuel) {
 
-            logerModuel.init(calculatorConfigModule);
+            loggerModuel.init(calculatorConfigModule);
 
 			orderStepsModule.init(calculatorConfigModule);
             let orderSteps = orderStepsModule.getOrderSteps();
@@ -13,7 +13,7 @@
 			let orderStep = orderStepModule;
 			
 			let calcHelper = calcHelperModule;
-			calcHelper.init(orderSteps, orderStepsHelperModule, calculatorConfigModule, orderStep, numberHelperModule, logerModule);
+			calcHelper.init(orderSteps, orderStepsHelperModule, calculatorConfigModule, orderStep, numberHelperModule, loggerModule);
 
 			panelSizeStepModule.init(orderStep, orderStepsHelperModule, calcHelper);
             railAndSocketStepModule.init(orderStep, orderStepsHelperModule, calcHelper, numberHelperModule);

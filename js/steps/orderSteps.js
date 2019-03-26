@@ -655,7 +655,8 @@
 									id:'step-44',
 									title:'Рейлинги / розетки',
 									calcFunc:'railsAndSocketsCalc',
-									stepElements: [
+                                    stepElements: [
+                                        /*
 										{
 											id:'element-45',
 											title:'Монтаж рейлингов:',
@@ -665,7 +666,7 @@
 											items:[{
 													id:'item-46',
 													title:'Да',
-													price: 10.10
+                                                    price: calculatorConfig.SKINALI_ONE_RAILS_INSTALATION_PRICE
 												},
 												{
 													id:'item-47',
@@ -673,7 +674,7 @@
 													isSelected:true
 												}
 											]
-										},
+										},*/
 										{
 											id:'element-48',
 											title: 'Выпил под блоки розеток:',
