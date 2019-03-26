@@ -1,6 +1,11 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\js",
+    "\\js\\lib",
+    "\\js\\steps",
+    "\\js\\utils"
   ],
+  "SelectedNode": "\\js\\steps\\railAndSocketStep.js",
   "PreviewInSolutionExplorer": false
 }

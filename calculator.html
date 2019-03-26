@@ -10,7 +10,7 @@
 
     <link href="https://fonts.googleapis.com/css?family=Oswald" rel=“stylesheet”>
 
-    <link rel="stylesheet" href="calculator.css"/>
+    <link rel="stylesheet" href="css/calculator.css"/>
 
     <title>Онлайн калькулятор для расчета скинали, рассчитать стоимость изготовления стеклянного фартука</title>
 </head>
@@ -34,14 +34,20 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
-<script src="calculatorConsts.js" type="text/javascript"></script>
-<script src="railAndSocketStep.js" type="text/javascript"></script>
-<script src="orderStep.js" type="text/javascript"></script>
-<script src="orderSteps.js" type="text/javascript"></script>
-<script src="calculator.js" type="text/javascript"></script>
+<script src="js/calculatorConfig.js" type="text/javascript"></script>
+<script src="js/utils/numberHelper.js" type="text/javascript"></script>
+<script src="js/utils/loger.js" type="text/javascript"></script>
+<script src="js/steps/panelSizeStep.js" type="text/javascript"></script>
+<script src="js/steps/railAndSocketStep.js" type="text/javascript"></script>
+<script src="js/steps/orderStep.js" type="text/javascript"></script>
+<script src="js/steps/orderSteps.js" type="text/javascript"></script>
+<script src="js/steps/orderStepsHelper.js" type="text/javascript"></script>
+<script src="js/steps/calcHelper.js" type="text/javascript"></script>
+<script src="js/calculator.js" type="text/javascript"></script>
 <script type="text/javascript">
     $(function() {
-        calculatorModule.init(calculatorConstsModule, orderStepsModule, orderStepModule, railAndSocketStepModule);
+        calculatorModule.init(calculatorConfigModule, orderStepsModule, orderStepsHelperModule, calcHelperModule, orderStepModule, railAndSocketStepModule,
+			panelSizeStepModule, numberHelperModule, logerModule);
     });
 </script>
 </body>

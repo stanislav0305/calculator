@@ -1,12 +1,13 @@
 ﻿var railAndSocketStepModule = (function(){
-	let _orderStep;
-	let _orderStepsHelper;
-	let _calculationHelper;
+    let orderStep;
+    let orderStepRender;
+	let orderStepsHelper;
+	let calcHelper;
 	
 	let module = {
 		renderRadioInstallationOfRails:function(element, stepId){			
 			if (element.title !== undefined){
-				_orderStep.renderElementTitle(element.title, element.info);
+			    orderStepRender.renderElementTitle(element.title, element.info);
 			}
 			
 			if (element.items !== undefined){				
@@ -24,7 +25,7 @@
 					radioItemDiv.append(`<input id="${item.id}" type="radio" class="custom-control-input" name="${element.id}" ${chackedAtr} step-id="${stepId}"/>`).append(`<label for="${item.id}" class="custom-control-label">${item.title}</label>`);
 					
 					if (item.info !== undefined){
-						let toolTip = _orderStep.renderToolTip(item.info);
+                        let toolTip = orderStepRender.renderToolTip(item.info);
 						radioItemDiv.append(toolTip);
 					}
 					
@@ -32,7 +33,7 @@
 				});
 
 				module.renderInputInstallationOfRails(element, stepId);
-				_orderStep.radioSetEvents(element);
+			    orderStepRender.radioSetEvents(element);
 			}
 		},
 		renderInputInstallationOfRails: function(element, stepId){
@@ -98,15 +99,15 @@
 				let elementId = $(this).attr('name');
 				let itemId = this.id;
 				
-				let setp = _orderStepsHelper.getStepOrNull(stepId);
-				let element = _orderStepsHelper.getStepElementOrNull(setp, elementId);
+				let setp = orderStepsHelper.getStepOrNull(stepId);
+				let element = orderStepsHelper.getStepElementOrNull(setp, elementId);
 				
-				_orderStepsHelper.unselectElementItems(element.items);
-				let selectedItem = _orderStepsHelper.selectElementItem(element.items, itemId);
+				orderStepsHelper.unselectElementItems(element.items);
+				let selectedItem = orderStepsHelper.selectElementItem(element.items, itemId);
 				
 				let show = selectedItem.title === 'Да' && selectedItem.isSelected === true;
 				module.displayInputInstallationOfRails(show);
-				_calculationHelper.recalcAll();
+				calcHelper.recalcAll();
 			});
 		},
 		removeEventInstallationOfRailsElements:function(){
@@ -124,11 +125,11 @@
 				let itemId = $(this).attr('item-id');
 				let val = $('#inputInstallationOfRails').val();
 				
-				let setp = _orderStepsHelper.getStepOrNull(stepId);
-				let element = _orderStepsHelper.getStepElementOrNull(setp, elementId);
+				let setp = orderStepsHelper.getStepOrNull(stepId);
+				let element = orderStepsHelper.getStepElementOrNull(setp, elementId);
 				
-				_orderStepsHelper.saveInstallationOfRailsCount(element, itemId, val);
-				_calculationHelper.recalcAll();
+				orderStepsHelper.saveInstallationOfRailsCount(element, itemId, val);
+				calcHelper.recalcAll();
 			});
 		},
 		removeEventInputInstallationOfRails:function(){
@@ -138,7 +139,7 @@
 		
 		renderRadioSocketsCount:function(element, stepId){
 			if (element.title !== undefined){
-				_orderStep.renderElementTitle(element.title, element.info);
+			    orderStepRender.renderElementTitle(element.title, element.info);
 			}
 			
 			if (element.items !== undefined){				
@@ -164,7 +165,7 @@
 				});
 
 				module.renderSocketCountElements(element, stepId);
-				_orderStep.radioSetEvents(element);
+			    orderStepRender.radioSetEvents(element);
 			}
 		},
 		renderSocketCountElements: function(element, stepId){
@@ -239,15 +240,15 @@
 				let elementId = $(this).attr('name');
 				let itemId = this.id;
 				
-				let setp = _orderStepsHelper.getStepOrNull(stepId);
-				let element = _orderStepsHelper.getStepElementOrNull(setp, elementId);
+				let setp = orderStepsHelper.getStepOrNull(stepId);
+				let element = orderStepsHelper.getStepElementOrNull(setp, elementId);
 				
-				_orderStepsHelper.unselectElementItems(element.items);
-				let selectedItem = _orderStepsHelper.selectElementItem(element.items, itemId);
+				orderStepsHelper.unselectElementItems(element.items);
+				let selectedItem = orderStepsHelper.selectElementItem(element.items, itemId);
 				
 				let show = selectedItem.title === 'Да' && selectedItem.isSelected === true;
 				module.displayInputSocketsCount(show);
-				_calculationHelper.recalcAll();
+				calcHelper.recalcAll();
 			});
 		},
 		removeSocketsCountElements:function(){
@@ -268,13 +269,13 @@
                 let socketsBlokNumber = $(this).attr('socket-blok-number');
                 let isChecked = $(this).is(':checked');
 		        
-		        let setp = _orderStepsHelper.getStepOrNull(stepId);
-		        let element = _orderStepsHelper.getStepElementOrNull(setp, elementId);				
+		        let setp = orderStepsHelper.getStepOrNull(stepId);
+		        let element = orderStepsHelper.getStepElementOrNull(setp, elementId);				
 
-				let selectedSocketsBlok = _orderStepsHelper.saveSocketsBlokSelect(element, itemId, socketsBlokNumber, isChecked);
+				let selectedSocketsBlok = orderStepsHelper.saveSocketsBlokSelect(element, itemId, socketsBlokNumber, isChecked);
 				
                 module.displaySocketBlokCountInputCount(socketsBlokNumber, isChecked);
-		        _calculationHelper.recalcAll();
+		        calcHelper.recalcAll();
                
 		    });
 		},
@@ -316,11 +317,11 @@
                 let socketsBlokNumber = $(this).attr('socket-blok-number');
                 let val = $(this).val();
 				
-				let setp = _orderStepsHelper.getStepOrNull(stepId);
-				let element = _orderStepsHelper.getStepElementOrNull(setp, elementId);
+				let setp = orderStepsHelper.getStepOrNull(stepId);
+				let element = orderStepsHelper.getStepElementOrNull(setp, elementId);
 				
-                _orderStepsHelper.saveSocketsCount(element, itemId, socketsBlokNumber, val);
-				_calculationHelper.recalcAll();
+                orderStepsHelper.saveSocketsCount(element, itemId, socketsBlokNumber, val);
+				calcHelper.recalcAll();
 			});
 		},
         removeEventInputSocketsCount: function () {
@@ -333,10 +334,11 @@
 	};
 	
 	return {
-		init:function(orderStep, orderStepsHelper, calculationHelper){
-			_orderStep = orderStep;
-			_orderStepsHelper = orderStepsHelper;
-			_calculationHelper = calculationHelper;
+		init:function(orderStepModule, orderStepsHelperModule, calcHelperModule){
+            orderStep = orderStepModule;
+		    orderStepRender = orderStep.orderStepRender;
+            orderStepsHelper = orderStepsHelperModule;
+			calcHelper = calcHelperModule;
 		},
 		renderRadioInstallationOfRails: module.renderRadioInstallationOfRails,
 		renderRadioSocketsCount: module.renderRadioSocketsCount,
