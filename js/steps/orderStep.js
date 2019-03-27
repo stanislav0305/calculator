@@ -44,8 +44,6 @@
 				step.stepElements.forEach(function(element, index){
 					if (element.itemChange === 'eventAppendSizeElements'){
 						panelSizeStep.renderRadioAppendSize(element, _stepId);
-					} else if (element.itemChange === 'eventInstallationOfRails'){
-						railAndSocketStep.renderRadioInstallationOfRails(element, _stepId);
 					} else if (element.itemChange === 'eventSocketsCount'){
 						railAndSocketStep.renderRadioSocketsCount(element, _stepId);
 					} else if(element.itemChange === 'eventHandleTypes'){
@@ -115,8 +113,6 @@
 				this.setRadioEventRefreshSteps(element.id);
 			} else if (element.itemChange === 'eventAppendSizeElements'){
 				panelSizeStep.setRadioEventAppendSizeElements(element.id);
-			} else if (element.itemChange === 'eventInstallationOfRails'){
-				railAndSocketStep.setEventInstallationOfRailsElements(element.id);
 			} else if(element.itemChange === 'eventSocketsCount'){
 				railAndSocketStep.setEventSocketsCountElements(element.id);				
 			} else if (element.itemChange === 'eventHandleTypes'){
@@ -667,9 +663,6 @@
 			panelSizeStep.removeRadioEventAppendSizeElements();				
 			panelSizeStep.removeIputPanelSizeEventOutElements();
 			panelSizeStep.removePanelSizeContinueBtnEventEvent();
-			
-			railAndSocketStep.removeEventInputInstallationOfRails();
-			railAndSocketStep.removeEventInstallationOfRailsElements();
 			
             railAndSocketStep.removeSocketsCountElements();
             railAndSocketStep.removeSocketsBlockElements();

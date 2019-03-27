@@ -93,15 +93,6 @@
                 }
             }
         },
-        saveInstallationOfRailsCount(element, itemId, value) {
-            for (let iIdx = 0; iIdx < element.items.length; iIdx++) {
-                let item = element.items[iIdx];
-                if (item.id === itemId) {
-                    item.enteredValue = value;
-                    break;
-                }
-            }
-        },
         saveCabinTypesSize(element, itemId, sizeName, value) {
             for (let iIdx = 0; iIdx < element.items.length; iIdx++) {
                 let item = element.items[iIdx];

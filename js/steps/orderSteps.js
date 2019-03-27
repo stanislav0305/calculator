@@ -657,25 +657,6 @@
 									title:'Розетки',
 									calcFunc:'railsAndSocketsCalc',
                                     stepElements: [
-                                        /*
-										{
-											id:'element-45',
-											title:'Монтаж рейлингов:',
-											info:'Данная опция подразумевает высверливание в стекле отверстий необходимого диаметра под рейлинги Клиента. ',
-											itemChange:'eventInstallationOfRails',
-											enteredValue:'',
-											items:[{
-													id:'item-46',
-													title:'Да',
-                                                    price: calculatorConfig.SKINALI_ONE_RAILS_INSTALATION_PRICE
-												},
-												{
-													id:'item-47',
-													title:'Нет',
-													isSelected:true
-												}
-											]
-										},*/
 										{
 											id:'element-48',
 											title: 'Выпил под блоки розеток:',

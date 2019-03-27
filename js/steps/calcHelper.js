@@ -150,29 +150,14 @@
 		    return result;
 		},
 		railsAndSocketsCalc: function(step) {
-			let countToPriceCalc = function(price, count) {
-				if ((price !== undefined) && (count !== '') && (count !== undefined)) {
-					return count * price;
-				}
-
-				return 0.00;
-			}
-
-			//Rails calc
-            let railSelectedItem = step.stepElements[0].items.filter(item => item.isSelected === true)[0];
-		    let railingCount = railSelectedItem.enteredValue === undefined ? 0 : railSelectedItem.enteredValue;
-            let result = countToPriceCalc(calculatorConfig.SKINALI_ONE_RAILS_INSTALATION_PRICE, railSelectedItem.enteredValue);
-		    
 		    logger.log(`Шаг "${step.title}`);
-            logger.log(`колличество рейлингов(${railingCount}) * цена монтажа 1 рейлинга(${calculatorConfig.SKINALI_ONE_RAILS_INSTALATION_PRICE}) = ${result}`);
 
 			//Sockets calc
             let socketDataIsValid = true;
             let socketDrillingTotalPrice = 0.00;
             let socketCount = 0;
             let socketBlockCountWithPhotoPrinting = 0;
-		    let socketBlockWithPhotoPrintingTotalPrice = 0.00;
-			//let socketSelectedItem = step.stepElements[1].items.filter(item => item.isSelected === true)[0];
+		    let socketBlockWithPhotoPrintingTotalPrice = 0.00;			
 		    let socketSelectedItem = step.stepElements[0].items.filter(item => item.isSelected === true)[0];
 			if (socketSelectedItem.socketsBloks != undefined) {
 				for (let i = 0; i < socketSelectedItem.socketsBloks.length; i++) {
@@ -201,7 +186,7 @@
             logger.log(`колличество блоков резеток с фотопечатью(${socketBlockCountWithPhotoPrinting}) * цена фотопечати на блоке(${calculatorConfig.SKINALI_PHOTO_PRINTING_ON_ONE_SOCKET_BLOCK_PRICE}) = ${socketBlockWithPhotoPrintingTotalPrice}`);
             logger.log(`колличество выпилов под резетки(${socketCount}) * цена выпила(${calculatorConfig.SKINALI_ONE_SOCKET_DRILLING_PRICE}) = ${socketDrillingTotalPrice}`);
 
-            result = result + socketBlockWithPhotoPrintingTotalPrice + socketDrillingTotalPrice;
+            let result = socketBlockWithPhotoPrintingTotalPrice + socketDrillingTotalPrice;
             logger.log(`сумма:${result}`);
             logger.line();
 
