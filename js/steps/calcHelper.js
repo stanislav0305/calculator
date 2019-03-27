@@ -126,6 +126,28 @@
             logger.line();
 
 		    return result;
+        },
+		printingTypeStepCalc: function (step) {
+		    let selectedItem = step.stepElements[0].items.filter(item => item.isSelected === true)[0];
+		    let result = 0.00;
+
+		    if (selectedItem !== undefined && selectedItem.price !== undefined) {
+		        result = module.mainParams.areaSize * selectedItem.price;
+            }
+
+		    let str =
+		        `Шаг "${step.title} - ${selectedItem.title}" площядь(${module.mainParams.areaSize}) * цена(${selectedItem.price}) `;
+
+            if (selectedItem !== undefined && selectedItem.photoPrintingDesignPrice !== undefined) {
+                result = result + selectedItem.photoPrintingDesignPrice * 1;
+                str = str + ` + цена оформления фотопечати(${selectedItem.photoPrintingDesignPrice})`;
+            }
+
+            str = str + ` = ${result}`;
+            logger.log(str);
+		    logger.line();
+
+		    return result;
 		},
 		railsAndSocketsCalc: function(step) {
 			let countToPriceCalc = function(price, count) {
@@ -146,8 +168,10 @@
 
 			//Sockets calc
             let socketDataIsValid = true;
-            let socketTotalPrice = 0.00;
-		    let socketCount = 0;
+            let socketDrillingTotalPrice = 0.00;
+            let socketCount = 0;
+            let socketBlockCountWithPhotoPrinting = 0;
+		    let socketBlockWithPhotoPrintingTotalPrice = 0.00;
 			//let socketSelectedItem = step.stepElements[1].items.filter(item => item.isSelected === true)[0];
 		    let socketSelectedItem = step.stepElements[0].items.filter(item => item.isSelected === true)[0];
 			if (socketSelectedItem.socketsBloks != undefined) {
@@ -157,20 +181,27 @@
 							socketSelectedItem.socketsBloks[i].blockCount === undefined) {
 							socketDataIsValid = false;
 						} else {
-							socketCount =
-								socketCount +
+							socketCount = socketCount +
 								socketSelectedItem.socketsBloks[i].blockCount *
-								socketSelectedItem.socketsBloks[i].number;
+                                socketSelectedItem.socketsBloks[i].number;
+
+                            if (socketSelectedItem.socketsBloks[i].needPhotoPrinting === true) {
+                                socketBlockCountWithPhotoPrinting = socketBlockCountWithPhotoPrinting * 1 +
+                                    socketSelectedItem.socketsBloks[i].blockCount * 1;
+                            }
 						}
 					}
                 }
 
-			    socketTotalPrice = socketCount * calculatorConfig.SKINALI_ONE_SOCKET_DRILLING_PRICE;
+			    socketBlockWithPhotoPrintingTotalPrice = socketBlockCountWithPhotoPrinting *
+                    calculatorConfig.SKINALI_PHOTO_PRINTING_ON_ONE_SOCKET_BLOCK_PRICE;
+
+			    socketDrillingTotalPrice = socketCount * calculatorConfig.SKINALI_ONE_SOCKET_DRILLING_PRICE;
             }
+            logger.log(`колличество блоков резеток с фотопечатью(${socketBlockCountWithPhotoPrinting}) * цена фотопечати на блоке(${calculatorConfig.SKINALI_PHOTO_PRINTING_ON_ONE_SOCKET_BLOCK_PRICE}) = ${socketBlockWithPhotoPrintingTotalPrice}`);
+            logger.log(`колличество выпилов под резетки(${socketCount}) * цена выпила(${calculatorConfig.SKINALI_ONE_SOCKET_DRILLING_PRICE}) = ${socketDrillingTotalPrice}`);
 
-            logger.log(`колличество выпилов под резетки(${socketCount}) * цена выпила(${calculatorConfig.SKINALI_ONE_SOCKET_DRILLING_PRICE}) = ${socketTotalPrice}`);
-
-		    result = result + socketTotalPrice;
+            result = result + socketBlockWithPhotoPrintingTotalPrice + socketDrillingTotalPrice;
             logger.log(`сумма:${result}`);
             logger.line();
 
@@ -270,8 +301,10 @@
 				if (step.calcFunc === 'panelSizeCalc') {
 					result = result + module.panelSizeCalc(step);
 				} else if (step.calcFunc === 'priceMultiplyByAreaSizeCalc') {
-					result = result + module.priceMultiplyByAreaSizeCalc(step);
-				} else if (step.calcFunc === 'railsAndSocketsCalc') {
+			        result = result + module.priceMultiplyByAreaSizeCalc(step);
+                } else if (step.calcFunc === 'printingTypeStepCalc') {
+                    result = result + module.printingTypeStepCalc(step);
+			    } else if (step.calcFunc === 'railsAndSocketsCalc') {
 					result = result + module.railsAndSocketsCalc(step);
 				} else if (step.calcFunc === 'mountingTypeCalc') {
 					result = result + module.mountingTypeCalc(step);

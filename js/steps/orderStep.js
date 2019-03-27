@@ -674,6 +674,7 @@
             railAndSocketStep.removeSocketsCountElements();
             railAndSocketStep.removeSocketsBlockElements();
             railAndSocketStep.removeEventInputSocketsCount();
+		    railAndSocketStep.removeSocketsBlockNeedPhotoPrintingElements();
 			
 			orderStepRender.removeEventRadioHandleTypesElements();
 			

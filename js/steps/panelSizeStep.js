@@ -17,7 +17,8 @@ let module = {
 			element.items.forEach(function(item, index){							
 				let radioItemDiv = $('<div class="custom-control custom-radio">');
 				let chackedAtr = item.isSelected === true ? 'checked' : '';
-				radioItemDiv.append(`<input id="${item.id}" type="radio" class="custom-control-input" name="${element.id}" ${chackedAtr} step-id="${stepId}"/>`).append(`<label for="${item.id}" class="custom-control-label">${item.title}</label>`);
+                radioItemDiv.append(`<input id="${item.id}" type="radio" class="custom-control-input" name="${element.id}" ${chackedAtr} step-id="${stepId}"/>`)
+                    .append(`<label for="${item.id}" class="custom-control-label">${item.title}</label>`);
 				
 				if (item.info !== undefined){
 					let toolTip = orderStepRender.renderToolTip(item.info);

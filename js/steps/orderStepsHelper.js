@@ -5,19 +5,7 @@
 		init(orderStepsModule){
 			orderSteps = orderStepsModule;
 		},
-        getStepElementOrNull(step, elementId) {
-            if (step.stepElements === undefined) {
-                return null;
-            }
-
-            for (let i = 0; i < step.stepElements.length; i++) {
-                if (step.stepElements[i].id === elementId && step.stepElements[i].id.length === elementId.length) {
-                    return step.stepElements[i];
-                }
-            }
-
-            return null;
-        },
+        
         findStep: function(stepId, steps) {
             let result = null;
 
@@ -27,7 +15,7 @@
                     result = step;
                     break;
                 }
-                if (step.stepElements !== undefined && result === null) {
+                if (step.stepElements !== undefined) {
                     let stepElements = step.stepElements;
                     for (let eInx = 0; eInx < stepElements.length; eInx++) {
                         let element = step.stepElements[eInx];
@@ -57,7 +45,23 @@
         getStepOrNull: function(stepId) {
             return this.findStep(stepId, orderSteps);
         },
-        unselectElementItems(items) {
+		getStepElementOrNull(step, elementId) {
+		    if (step.stepElements === undefined) {
+		        return null;
+		    }
+
+            let elementIndex = step.stepElements.findIndex(element => element.id === elementId && element.id.length === elementId.length);
+            return elementIndex >= 0 ? step.stepElements[elementIndex] : null;
+		},
+        getItemOrNull: function (element, itemId) {
+            if (element.items === undefined) {
+                return null;
+            }
+
+            let itemIndex = element.items.findIndex(item => item.id === itemId);            
+            return itemIndex >= 0 ? element.items[itemIndex] : null;
+        },
+		unselectElementItems(items) {
             for (let i = 0; i < items.length; i++) {
                 items[i].isSelected = undefined;
             }
@@ -161,21 +165,9 @@
                 }
             }
         },
-        saveSocketsBlokSelect(element, itemId, socketBlockNumber, isChecked) {
-            let itemIndex = element.items.findIndex(item => item.id === itemId);
-            let item = element.items[itemIndex];
-            let socketsBloks = item.socketsBloks;
-
-            socketsBloks[socketBlockNumber - 1].isSelected = isChecked;
-            return socketsBloks[socketBlockNumber - 1];
-        },
-        saveSocketsCount(element, itemId, socketBlockNumber, value) {
-            let itemIndex = element.items.findIndex(item => item.id === itemId);
-            let item = element.items[itemIndex];
-            let socketsBloks = item.socketsBloks;
-
-            socketsBloks[socketBlockNumber - 1].blockCount = value;
-            return socketsBloks[socketBlockNumber - 1];
+        getItemBlockOrNull(item, socketBlockNumber) {
+            let socketBlock = item.socketsBloks[socketBlockNumber - 1];
+            return socketBlock === undefined ? null : socketBlock;
         }
     };
 	

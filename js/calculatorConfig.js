@@ -45,7 +45,13 @@ const module = {
 
 	//цена фотопечаит за 1 квадратный метр (с PVN)
     SKINALI_PHOTO_PRINTING_PRICE: 45.19,
-	
+
+    //цена оформления фотопечати (с PVN)
+    SKINALI_PHOTO_PRINTING_DESIGN_PRICE: 18.08,
+
+    //цена фотопечати на 1 блоке розеток (с PVN)
+	SKINALI_PHOTO_PRINTING_ON_ONE_SOCKET_BLOCK_PRICE: 100.00,
+
 	//цена однотонной покраски за 1 квадратный метр (с PVN)
     SKINALI_MONOCHROMATIC_PAINTING_PRICE: 29.87,
 	

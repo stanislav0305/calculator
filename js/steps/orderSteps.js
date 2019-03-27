@@ -31,7 +31,7 @@
 			id:stepId,
 			title:'Вид печати',
 			doubleWidthSizeInMidle:true,
-			calcFunc:'priceMultiplyByAreaSizeCalc',
+            calcFunc:'printingTypeStepCalc',
 			stepElements: [
 				{
 					id:`element-34-${stepId}`,
@@ -41,7 +41,8 @@
 							title:'Фотопечать',
 							info:'Цветное изображение на поверхности стекла. Широко используется в оформлении дизайна интерьера и расширяет спектр применяемых стилевых решений. ',
 							isSelected: true,
-							price: photoPrintingPrice
+                            price: photoPrintingPrice,
+                            photoPrintingDesignPrice: calculatorConfig.SKINALI_PHOTO_PRINTING_DESIGN_PRICE
 						},
 						{
 							id:`item-36-${stepId}`,
@@ -653,7 +654,7 @@
 								},
 								{
 									id:'step-44',
-									title:'Рейлинги / розетки',
+									title:'Розетки',
 									calcFunc:'railsAndSocketsCalc',
                                     stepElements: [
                                         /*
@@ -688,31 +689,36 @@
 															number: 1,
 															title:'блок резеток из 1 резетки',
 															blockCount: '',
-															isSelected: false
+                                                            isSelected: false,
+															needPhotoPrinting: false
 														},
 														{
 															number: 2,
 															title:'блок резеток из 2 резетки',
 															blockCount: '',
-															isSelected: false
+															isSelected: false,
+															needPhotoPrinting: false
 														},
 														{
 															number: 3,
 															title:'блок резеток из 3 резетки',
 															blockCount: '',
-															isSelected: false
+															isSelected: false,
+															needPhotoPrinting: false
 														},
 														{
 															number: 4,
 															title:'блок резеток из 4 резетки',
 															blockCount: '',
-															isSelected: false
+															isSelected: false,
+															needPhotoPrinting: false
 														},
 														{
 															number: 5,
 															title:'блок резеток из 5 резетки',
 															blockCount: '',
-															isSelected: false
+															isSelected: false,
+															needPhotoPrinting: false
 														}
 													]
 												},
