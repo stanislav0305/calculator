@@ -1027,14 +1027,20 @@
 				doubleWidthSize:true,
 				isTotalPriceStep:true,
 				stepElements:[
-					{
-						id:'element-113',
-						priceBlock:0.00
-					},
-					{
-						id:'element-114',
-						textBlockCenter:'* Цена является ориентировочной и после обсуждения с менеджером может быть скорректирована'
-					}
+                    {
+                        id: 'total-price-step',
+                        totalPriceBlock: {
+                            totalPrice: 0.00,
+                            orderSendBlock: {
+                                showSendForm: false,
+                                client: {
+                                    name: '',
+                                    surname: '',
+                                    phone: ''
+                                }
+                            }
+                        }
+                    }
 				]
 			}
 			];

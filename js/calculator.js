@@ -3,9 +3,8 @@
     let module = {
         init:
             function(calculatorConfigModule, orderStepsModule, orderStepsHelperModule, calcHelperModule, orderStepModule, railAndSocketStepModule,
-                panelSizeStepModule, numberHelperModule, loggerModuel) {
-
-            loggerModuel.init(calculatorConfigModule);
+                panelSizeStepModule, totalPriceStepModule, validationHelperModule, loggerModule, consolePrinterModule,
+                mailSenderModule, templateHelperModule) {
 
 			orderStepsModule.init(calculatorConfigModule);
             let orderSteps = orderStepsModule.getOrderSteps();
@@ -13,12 +12,18 @@
 			let orderStep = orderStepModule;
 			
 			let calcHelper = calcHelperModule;
-			calcHelper.init(orderSteps, orderStepsHelperModule, calculatorConfigModule, orderStep, numberHelperModule, loggerModule);
+            calcHelper.init(orderSteps, orderStepsHelperModule, calculatorConfigModule, orderStep, validationHelperModule,
+                loggerModule, consolePrinterModule, totalPriceStepModule);
 
 			panelSizeStepModule.init(orderStep, orderStepsHelperModule, calcHelper);
-            railAndSocketStepModule.init(orderStep, orderStepsHelperModule, calcHelper, numberHelperModule);
-						
-            orderStep.init(orderStepsHelperModule, orderSteps, calcHelper, railAndSocketStepModule, panelSizeStepModule, panelSizeStepModule);
+            railAndSocketStepModule.init(orderStep, orderStepsHelperModule, calcHelper, validationHelperModule);
+
+            mailSenderModule.init(templateHelperModule);
+
+            totalPriceStepModule.init(templateHelperModule, orderStepsHelperModule, mailSenderModule, calculatorConfigModule);
+
+            orderStep.init(orderStepsHelperModule, orderSteps, calcHelper, railAndSocketStepModule, panelSizeStepModule,
+                totalPriceStepModule, templateHelperModule);
 			
 			orderStepsHelperModule.init(orderSteps);
 			

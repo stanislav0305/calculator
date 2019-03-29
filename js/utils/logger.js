@@ -1,23 +1,19 @@
-loggerModule = (function() {
-    let calculatorConfig;
+var loggerModule = (function() {
 
     let module = {
-        line: function () {
-            if (calculatorConfig.LOG_ON !== true) {
-                return;
-            }
-
-            module.log('--------------------');
-        },
-        log: function (str) {
-            if (calculatorConfig.LOG_ON !== true) {
-                return;
-            }
-
-            console.log(str);
-        },
-        init: function (calculatorConfigModule) {
-            calculatorConfig = calculatorConfigModule;
+        createLogger: function () {
+            return {
+                log: [],
+                clear: function () {
+                   this.log = [];
+                },
+                line: function () {
+                    this.log.push("--------------------");
+                },
+                info: function (message) {
+                    this.log.push(message);
+                }
+            };
         }
     };
 

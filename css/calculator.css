@@ -4,7 +4,7 @@
 
 h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
 margin-bottom: 0.5rem;
-font-family: ‘Oswald’, sans-serif;
+font-family: 'Oswald', sans-serif;
 font-weight: 500;
 line-height: 1.2;
 color: inherit;
@@ -38,12 +38,12 @@ color: inherit;
     border-top-color: #e6e6e6 !important;
 }
 
-.calculator{	
+.top-0-right-0 {
+    top: 0;
+    right:0;
 }
 
-.totalPriceStep{
-	background: #1d84f5 !important;
-    color: #ffffff !important;
+.calculator{	
 }
 
 .order-step {
@@ -51,7 +51,6 @@ color: inherit;
     min-height: 250px;
     background-color: #ffffff;
     color: #404041;
-    border: 1px solid #ffffff;
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     border-radius: 5px;

@@ -1,11 +1,12 @@
 {
   "ExpandedNodes": [
     "",
+    "\\css",
     "\\js",
     "\\js\\lib",
     "\\js\\steps",
     "\\js\\utils"
   ],
-  "SelectedNode": "\\calculator.html",
+  "SelectedNode": "\\js\\utils\\mailSender.js",
   "PreviewInSolutionExplorer": false
 }

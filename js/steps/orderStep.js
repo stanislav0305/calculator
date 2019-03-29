@@ -5,8 +5,10 @@
 	let calcHelper;
 	let orderSteps;
 	let railAndSocketStep;
-	let panelSizeStep;
-	
+    let panelSizeStep;
+    let totalPriceStep;
+    let templateHelper;
+
 	let orderStepRender =
 	{
 		createStep : function (step){
@@ -30,8 +32,10 @@
 			.append(`<div id=${_stepId} class="card-body">`)
 			.appendTo($column);
 			
-			if (step.isTotalPriceStep === true){
-				$orderStepRender.addClass('totalPriceStep');
+			if (step.isTotalPriceStep === true) {
+			    $orderStepRender
+			        .addClass('text-light')
+			        .addClass('bg-primary');
 			}
 			
 			$column.appendTo(mainContainerId);
@@ -59,7 +63,7 @@
 					}
 					currentOrderStep.renderTextBlock(element);
 					currentOrderStep.textBlockCenter(element);
-					currentOrderStep.priceBlock(element);
+                    totalPriceStep.totalPriceBlock(element, _stepId);
 				});
 			}
 		},
@@ -95,19 +99,15 @@
 			}
 		},
 		textBlockCenter:function(element){
-			if (element.textBlockCenter !== undefined){
-				$(`<p class="card-text text-center">${element.textBlockCenter}</p>`).appendTo(`#${_stepId}`);
+            if (element.textBlockCenter !== undefined) {
+                let data = {
+                    text: element.textBlockCenter
+                };
+               
+                let html = templateHelper.getTemplateResult("text-block-center", data);
+                $(`#${_stepId}`).append(html);
 			}
-		},
-		priceBlock:function(element){
-			if (element.priceBlock !== undefined){
-				$(`<h5 class="card-text text-center">≈ <span id="totalPrice">${element.priceBlock}</span> EUR</h5>`).appendTo(`#${_stepId}`);
-			}
-		},
-		setTotalPrice(totalPrice){
-			$('#totalPrice').text(totalPrice.toFixed(2));
-		},
-		
+        },
 		radioSetEvents: function(element){
 			if (element.itemChange === 'eventRefreshSteps'){
 				this.setRadioEventRefreshSteps(element.id);
@@ -599,13 +599,17 @@
 	}; 
 	
 	let module = {
-		init: function(orderStepsHelperModule, steps, calcHelperModule, railAndSocketStepModule, panelSizeStepModule, panelSizeStepModule){
-			orderStepsHelper = orderStepsHelperModule;
+        init: function (orderStepsHelperModule, steps, calcHelperModule, railAndSocketStepModule, panelSizeStepModule,
+            totalPriceStepModule, templateHelperModule) {
+            orderStepsHelper = orderStepsHelperModule;
+            totalPriceStep = totalPriceStepModule;
 			orderSteps = steps;
 			calcHelper = calcHelperModule;
 			
 			railAndSocketStep = railAndSocketStepModule;
-			panelSizeStep = panelSizeStepModule;
+            panelSizeStep = panelSizeStepModule;
+
+		    templateHelper = templateHelperModule;
 		},
 		
 		createStep: function(step){
@@ -674,11 +678,14 @@
 			orderStepRender.removeEventCabinTypesElements();
 			orderStepRender.removeEventCahngeCabinTypesParametrs();
 			orderStepRender.removeEventFocusOutCabinTypeSize();
-			
+
+            totalPriceStep.removeOrderBtnEvent();
+		    totalPriceStep.removeOrderFormSubmitEvent();
+
 			$('.calculator').empty();
 		},
 		setTotalPrice: function(totalPrice){
-			orderStepRender.setTotalPrice(totalPrice);
+		    totalPriceStep.setTotalPrice(totalPrice);
 		},
 				
 		orderStepRender: orderStepRender
