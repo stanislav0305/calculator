@@ -200,7 +200,7 @@
                 .SKINALI_ONE_SOCKET_DRILLING_PRICE}) = ${socketDrillingTotalPrice}`);
 
             let result = socketBlockWithPhotoPrintingTotalPrice + socketDrillingTotalPrice;
-            logger.calcInfo(`сумма:${result}`);
+            logger.calcInfo(`сумма: ${result}`);
             logger.line();
 
             return result;

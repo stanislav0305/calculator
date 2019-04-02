@@ -104,7 +104,7 @@
         SEND_ORDER_FROM: "stasmainwork@gmail.com",
 
         //емайл получателя эмайла с данными заказа
-        SEND_ORDER_TO: "0305stas@inbox.lv",
+        SEND_ORDER_TO: "bugsy@inbox.lv", //"0305stas@inbox.lv",
 
         //subject отправителя эмайла с данными заказа
         SEND_ORDER_SUBJECT: "Новый заказ от " 
