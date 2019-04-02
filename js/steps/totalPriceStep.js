@@ -3,6 +3,7 @@ var totalPriceStepModule = (function () {
     let orderStepsHelper;
     let mailSender;
     let calculatorConfig;
+    let calcHelper;
 
 	let module = {
 	    totalPriceBlock: function (element, stepId) {
@@ -63,19 +64,38 @@ var totalPriceStepModule = (function () {
                 event.preventDefault();
 
                 let client = module.getFormData("#sendOrderForm");
-                console.log(module.getFormData("#sendOrderForm"));
-
-                mailSender.createMailDataObj(client, []);
-                mailSender.send();
-                //$("#client-name").val();
-
-                //var formdata = $(this).serialize();
+                let totalPrice = $('#totalPrice').text();
+                let log = calcHelper.getLogger().getFiltredLog();
+                let mailData = mailSender.createOrderMailDataObj(client, totalPrice, log);
                 
-                
-               
-                //$("#sendFinishNotification").fadeIn(2000, function() {
-                //    module.hideSendForm();
-                //}).delay(3500).fadeOut(3000, "linear");
+
+                $("#sendProgressNotification").fadeIn(2000,
+                    function() {
+                        let promise = mailSender.send(mailData);
+                        promise.then(
+                            message => {
+                                $("#sendProgressNotification").fadeOut(500);
+                                if (message === "OK") {
+                                    $("#sendFinishNotification")
+                                        .fadeIn(500,
+                                            function() {
+                                                module.hideSendForm();
+                                            })
+                                        .delay(5000)
+                                        .fadeOut(2000, "linear");
+                                } else {
+                                    console.log(`В процессе отправки произошла ошибка. Ошибка: ${message}`);
+                                    $("#sendErrorText").text(message);
+
+                                    $("#sendErrorNotification")
+                                        .fadeIn(500)
+                                        .delay(5000)
+                                        .fadeOut(2000, "linear");
+                                }
+
+                            }
+                        );
+                    });
                 
                 return false;
             });
@@ -84,12 +104,13 @@ var totalPriceStepModule = (function () {
             $(document).off('submit', "#sendOrderForm");
         },
 
-    init: function (templateHelperModule, orderStepsHelperModule, mailSenderModule, calculatorConfigModule) {
+        init: function (templateHelperModule, orderStepsHelperModule, mailSenderModule, calculatorConfigModule, calcHelperModule) {
 	        templateHelper = templateHelperModule;
 	        orderStepsHelper = orderStepsHelperModule;
 	        mailSender = mailSenderModule;
-            calculatorConfig = calculatorConfigModule;
-    }
+	        calculatorConfig = calculatorConfigModule;
+            calcHelper = calcHelperModule;
+        }
 	};
 
     return module;

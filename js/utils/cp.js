@@ -8,7 +8,7 @@ var consolePrinterModule = (function () {
             }
 
             for (let i = 0; i < logger.log.length; i++) {
-                console.log(logger.log[i]);
+                console.log(logger.log[i].message);
             }
         },
         init: function (calculatorConfigModule) {

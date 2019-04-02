@@ -18,9 +18,10 @@
 			panelSizeStepModule.init(orderStep, orderStepsHelperModule, calcHelper);
             railAndSocketStepModule.init(orderStep, orderStepsHelperModule, calcHelper, validationHelperModule);
 
-            mailSenderModule.init(templateHelperModule);
+            mailSenderModule.init(templateHelperModule, calculatorConfigModule);
 
-            totalPriceStepModule.init(templateHelperModule, orderStepsHelperModule, mailSenderModule, calculatorConfigModule);
+            totalPriceStepModule.init(templateHelperModule, orderStepsHelperModule, mailSenderModule,
+                calculatorConfigModule, calcHelper);
 
             orderStep.init(orderStepsHelperModule, orderSteps, calcHelper, railAndSocketStepModule, panelSizeStepModule,
                 totalPriceStepModule, templateHelperModule);

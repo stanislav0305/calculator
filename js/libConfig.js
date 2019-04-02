@@ -1,9 +1,12 @@
 var libConfigModule = (function() {
 
 
-    let initUnderscore = function() {
+    let initUnderscore = function () {
+        
         _.templateSettings = {
-            interpolate: /\{\{(.+?)\}\}/g
+            interpolate: /\{\{(.+?)\}\}/g,
+            evaluate:    /\[\[(.+?)\]\]/g,
+            escape:      /\(\((.+?)\)\)/g
         };
     };
 

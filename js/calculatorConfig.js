@@ -88,13 +88,28 @@
         //цена однотонной покраски (с PVN)
         DOORS_MONOCHROMATIC_PAINTING_PRICE: 20.00,
         //-----------------------------
-        
+
         //выводить лог в консоль
         PRINT_LOG_TO_CONSOLE_ON: true,
 
+        //-----------------------------
+
         //отображать кнопку "заказать"
-        SHOW_ORDER_BUTTON: true
+        SHOW_ORDER_BUTTON: true,
+
+        //ключ для отправки мейлов сгенерированый на smtpJs.com
+        SEND_ORDER_SECURE_TOKEN: "2a89635f-a426-414c-9cdd-4616b54b3fec",
         
+        //емайл отправителя эмайла с данными заказа к которому привязан ключ на smtpJs.com
+        SEND_ORDER_FROM: "stasmainwork@gmail.com",
+
+        //емайл получателя эмайла с данными заказа
+        SEND_ORDER_TO: "0305stas@inbox.lv",
+
+        //subject отправителя эмайла с данными заказа
+        SEND_ORDER_SUBJECT: "Новый заказ от " 
+
+        //-----------------------------
 };
 
 return module;

@@ -1,11 +1,13 @@
 var mailSenderModule = (function () {
     let templateHelper;
+    let calculatorConfig;
 
-    let getOrderMailBody = function(client, logRows) {
+    let getOrderMailBody = function (client, totalPrice, logRows) {
         let data = {
             clientName: client.name,
             clientSurname: client.surname,
             clientPhone: client.phone,
+            totalPrice: totalPrice,
             logRows: logRows
         };
         let html = templateHelper.getTemplateResult("order-mail", data);
@@ -13,96 +15,22 @@ var mailSenderModule = (function () {
     };
 
     let module = {
-        createMailDataObj: function (client, logRows) {
-            return {};
+        createOrderMailDataObj: function (client, totalPrice, logRows) {
+            return {
+                SecureToken: calculatorConfig.SEND_ORDER_SECURE_TOKEN,
+                To: calculatorConfig.SEND_ORDER_TO,
+                From: calculatorConfig.SEND_ORDER_FROM,
+                Subject: `${calculatorConfig.SEND_ORDER_SUBJECT} ${client.name} ${client.surname}`,
+                Body: getOrderMailBody(client, totalPrice, logRows)
+            };
         },
-        send: function (mailObj) {
-            /*
-            var xmlhttp = (window.XMLHttpRequest) ? new XMLHttpRequest() : new ActiveXObject("Microsoft.XMLHTTP");
-            xmlhttp.open('POST', 'https://mandrillapp.com/api/1.0/messages/send.json');
-            xmlhttp.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
-            xmlhttp.onreadystatechange = function () {
-                if (xmlhttp.readyState == 4) {
-                    if (xmlhttp.status == 200) {
-                        alert('Mail sended!');
-                    }
-                    else if (xmlhttp.status == 500) {
-                        alert('Check apikey');
-                    } else {
-                         alert('Request error');
-                    }
-                }
-            }
-            xmlhttp.send(JSON.stringify({
-                'key': '28d569326a75f91b3456d978f4246bef-us20',
-                'message': {
-                    'from_email': 'mail_from@write.here',
-                    'to': [{
-                            'email': '0305stas@inbox.lv',
-                            'type': 'to'
-                    }],
-                    'autotext': 'true',
-                    'subject': 'Yeah!',
-                    'html': '<h1>Its work!</h1>'
-                }
-            }));
-            */
-            /*
-            var m = new mandrill.Mandrill('28d569326a75f91b3456d978f4246bef-us20'); // This will be public
-
-            //function sendTheMail() {
-                m.messages.send({
-                    "message": {
-                        "from_email": "stasmainwork@gmail.com",
-                        "from_name": "Stas T",
-                        "to": [{ "email": "0305stas@inbox.lv", "name": "stas" }], // Array of recipients
-                        "subject": "optional_subject_line",
-                        "text": "Text to be sent in the body" // Alternatively, use the "html" key to send HTML emails rather than plaintext
-                    }
-                });
-            */
-            /*
-            $.ajax({
-                type: "POST",
-                url: "https://mandrillapp.com/api/1.0/messages/send.json",
-                data: {
-                    'key': '28d569326a75f91b3456d978f4246bef-us20',
-                    'message': {
-                        'from_email': 'stasmainwork@gmail.com',
-                        'to': [
-                            {
-                                'email': '0305stas@inbox.lv',
-                                'name': 'Stas',
-                                'type': 'to'
-                            }
-                        ],
-                        'subject': 'title',
-                        'html': 'html can be used'
-                    }
-                }
-            });
-            */
-            
-            Email.send({
-                SecureToken: '8d5f32b2-df68-46ab-b8f8-22e21e06bbb1',
-                To: '0305stas@inbox.lv',
-                From: "stasmainwork@gmail.com",
-                Subject: "TEST This is the subject",
-                Body: "TEST And this is the body"
-            }).then(
-                message => alert(message)
-            );
-            
-            //Email.send("stasmainwork@gmail.com",
-            //    "0305stas@inbox.lv",
-            //    "Hello",
-            //    "SMTP JS",
-            //    "smtp.gmail.com",
-            //    "stasmainwork@gmail.com",
-            //    "stas+work+28");
+        send: function (mailData) {
+            let promise = Email.send(mailData);
+            return promise;
         },
-        init: function (templateHelperModule) {
+        init: function (templateHelperModule, calculatorConfigModule) {
             templateHelper = templateHelperModule;
+            calculatorConfig = calculatorConfigModule;
         }
     };
     return module;
