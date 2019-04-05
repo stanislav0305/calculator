@@ -7,6 +7,7 @@
 	let railAndSocketStep;
     let panelSizeStep;
     let totalPriceStep;
+    let metringAndInstallationStep;
     let templateHelper;
 
 	let orderStepRender =
@@ -54,8 +55,12 @@
 						currentOrderStep.renderRadioHandleTypes(element);
 					} else if (element.itemChange === 'eventCabinTypes'){
 						currentOrderStep.renderRadioCabinTypes(element);
-					} else if (element.itemChange === 'eventSlidingDoorTypes'){
-						currentOrderStep.renderSlidingDoorTypes(element);
+					} else if (element.itemChange === 'eventSlidingDoorTypes') {
+				        currentOrderStep.renderSlidingDoorTypes(element);
+                    } else if (element.itemChange === 'eventMetringElementChange') {
+				        metringAndInstallationStep.renderMetringBlock(element, _stepId);
+                    } else if (element.itemChange === 'eventInstallingElementChange') {
+					    metringAndInstallationStep.renderInstalationBlock(element, step);
 					} else if (element.itemChange === 'eventSwingDoorsTypes'){
 						currentOrderStep.renderSwingDoorsTypes(element);
 					} else{						
@@ -115,8 +120,12 @@
 				panelSizeStep.setRadioEventAppendSizeElements(element.id);
 			} else if(element.itemChange === 'eventSocketsCount'){
 				railAndSocketStep.setEventSocketsCountElements(element.id);				
-			} else if (element.itemChange === 'eventHandleTypes'){
-				this.setEventRadioHandleTypesElements(element.id);
+            } else if (element.itemChange === 'eventHandleTypes') {
+		        this.setEventRadioHandleTypesElements(element.id);
+            } else if (element.itemChange === 'eventMetringElementChange') {
+		       // is added in render function in step module
+            } else if (element.itemChange === 'eventInstallingElementChange') {
+			  // is added in render function  in step module
 			} else if (element.itemChange === 'eventCabinTypes'){
 				this.setEventCabinTypesElements(element.id);
 			} else if (element.itemChange === 'eventSlidingDoorTypes'){
@@ -263,8 +272,8 @@
 
 			this.eventRadioHandleTypesElements = [];
 		},
-		
-		
+
+
 		renderRadioCabinTypes:function(element){
 			let currentOrderStep = this;
 								
@@ -600,9 +609,10 @@
 	
 	let module = {
         init: function (orderStepsHelperModule, steps, calcHelperModule, railAndSocketStepModule, panelSizeStepModule,
-            totalPriceStepModule, templateHelperModule) {
+            totalPriceStepModule, metringAndInstallationStepModule, templateHelperModule) {
             orderStepsHelper = orderStepsHelperModule;
             totalPriceStep = totalPriceStepModule;
+            metringAndInstallationStep = metringAndInstallationStepModule;
 			orderSteps = steps;
 			calcHelper = calcHelperModule;
 			
@@ -673,7 +683,10 @@
             railAndSocketStep.removeEventInputSocketsCount();
 		    railAndSocketStep.removeSocketsBlockNeedPhotoPrintingElements();
 			
-			orderStepRender.removeEventRadioHandleTypesElements();
+            orderStepRender.removeEventRadioHandleTypesElements();
+
+            metringAndInstallationStepModule.removeEventMetringElementChange();
+		    metringAndInstallationStepModule.removeEventInstallingElementChange();
 			
 			orderStepRender.removeEventCabinTypesElements();
 			orderStepRender.removeEventCahngeCabinTypesParametrs();

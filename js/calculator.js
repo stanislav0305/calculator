@@ -4,7 +4,7 @@
         init:
             function(calculatorConfigModule, orderStepsModule, orderStepsHelperModule, calcHelperModule, orderStepModule, railAndSocketStepModule,
                 panelSizeStepModule, totalPriceStepModule, validationHelperModule, loggerModule, consolePrinterModule,
-                mailSenderModule, templateHelperModule) {
+                mailSenderModule, templateHelperModule, metringAndInstallationStepModule) {
 
 			orderStepsModule.init(calculatorConfigModule);
             let orderSteps = orderStepsModule.getOrderSteps();
@@ -23,8 +23,10 @@
             totalPriceStepModule.init(templateHelperModule, orderStepsHelperModule, mailSenderModule,
                 calculatorConfigModule, calcHelper);
 
+            metringAndInstallationStepModule.init(orderStepsHelperModule, templateHelperModule, calcHelper);
+
             orderStep.init(orderStepsHelperModule, orderSteps, calcHelper, railAndSocketStepModule, panelSizeStepModule,
-                totalPriceStepModule, templateHelperModule);
+                totalPriceStepModule, metringAndInstallationStepModule, templateHelperModule);
 			
 			orderStepsHelperModule.init(orderSteps);
 			

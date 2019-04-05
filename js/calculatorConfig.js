@@ -1,4 +1,5 @@
 ﻿var calculatorConfigModule = (function() {
+    let isLocalhost = ["localhost", "127.0.0.1", ""].includes(window.location.hostname);
 
     const module = {
         //-----------------------------
@@ -104,7 +105,7 @@
         SEND_ORDER_FROM: "stasmainwork@gmail.com",
 
         //емайл получателя эмайла с данными заказа
-        SEND_ORDER_TO: "bugsy@inbox.lv", //"0305stas@inbox.lv",
+        SEND_ORDER_TO: isLocalhost === true ? "0305stas@inbox.lv" : "bugsy@inbox.lv",
 
         //subject отправителя эмайла с данными заказа
         SEND_ORDER_SUBJECT: "Новый заказ от " 

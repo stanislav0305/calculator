@@ -3,14 +3,17 @@ var templateHelperModule = (function() {
     let tempalateDictionary = {
         compiledTemplates: [],
         get: function(templateId) {
-            let compiledTemplate = _.find(tempalateDictionary.compiledTemplates,
+            let keyPair = _.find(tempalateDictionary.compiledTemplates,
                 function(item) {
                     return item.id === templateId;
                 });
 
-            if (compiledTemplate === undefined) {
+            let compiledTemplate;
+            if (keyPair === undefined) {
                 let html = $(`#${templateId}`).html();
                 compiledTemplate = tempalateDictionary.add(templateId, html);
+            } else {
+                compiledTemplate = keyPair.compiledTemplate;
             }
 
             return compiledTemplate;

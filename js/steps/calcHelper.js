@@ -109,8 +109,7 @@
                 logger.line();
             }
         },
-
-
+       
         defaultCalc: function(step) {
             let selectedItem = step.stepElements[0].items.filter(item => item.isSelected === true)[0];
             let result = 0.00;
@@ -209,15 +208,46 @@
             let selectedItem = step.stepElements[0].items.filter(item => item.isSelected === true)[0];
             let result = 0.00;
 
-            if (selectedItem !== undefined && selectedItem.itemType === 'glue') {
+            if (selectedItem !== undefined && selectedItem !== null && selectedItem.itemType === 'glue') {
                 result = calculatorConfig.SKINALI_GLUE_PRICE;
                 logger.calcInfo(`Шаг "${step.title} - клей" цена за клей (${calculatorConfig.SKINALI_GLUE_PRICE}) = ${result}`);
-            } else if (selectedItem !== undefined && selectedItem.itemType === 'drilling') {
+            } else if (selectedItem !== undefined && selectedItem !== null && selectedItem.itemType === 'drilling') {
                 result = module.mainParams.drillingCount * calculatorConfig.SKINALI_ONE_HOLE_DRILLING_PRICE;
                 logger.calcInfo(`Шаг "${step.title} - сквозное" колличество отверстий(${module.mainParams.drillingCount}) * цена(${
                     calculatorConfig.SKINALI_ONE_HOLE_DRILLING_PRICE}) = ${result}`);
+            } else if (selectedItem !== undefined && selectedItem !== null && selectedItem.itemType === 'withoutDrilling') {
+                result = 0.00;
+                logger.calcInfo(`Шаг "${step.title} - без отверстий" = ${result}`);
             }
 
+            logger.line();
+
+            return result;
+        },
+        metringAndInstallationPriceCalc: function (step) {
+            logger.calcInfo(`Шаг "${step.title}`);
+            let result = 0.00;
+
+            //metring calc
+            let metringSelectedItem = step.stepElements[0].items.find(item => item.isSelected === true);
+            if (metringSelectedItem != undefined && metringSelectedItem.price !== undefined) {
+                let sum = metringSelectedItem.price;
+                logger.calcInfo(`цена замера = = ${sum}`);
+
+                result = result + sum;
+            }
+
+            //installing calc
+            let installingSelectedItem = step.stepElements[1].items.find(item => item.isSelected === true);
+            if (installingSelectedItem != undefined && installingSelectedItem.price !== undefined) {
+                let sum = module.mainParams.areaSize * installingSelectedItem.price;
+                logger.calcInfo(`цена монтажа = площадь(${module.mainParams.areaSize}) * цена(${
+                    installingSelectedItem.price}) = ${sum}`);
+
+                result = result + sum;
+            }
+
+            logger.calcInfo(`сумма = ${result}`);
             logger.line();
 
             return result;
@@ -321,6 +351,8 @@
                     result = result + module.mountingTypeCalc(step);
                 } else if (step.calcFunc === 'printingType') {
                     result = result + module.printingTypeCalc(step);
+                } else if (step.calcFunc === 'metringAndInstallationPriceCalc') {
+                    result = result + module.metringAndInstallationPriceCalc(step);
                 } else if (step.calcFunc === 'defaultCalc') {
                     result = result + module.defaultCalc(step);
                 }

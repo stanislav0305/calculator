@@ -130,11 +130,11 @@
 	let glassType2Step = function(stepId){
 		return {
 			id:stepId,
-			title:'Тип стекла',
+            title: 'Тип стекла',
 			calcFunc:'priceMultiplyByAreaSizeCalc',
 			stepElements:[
 				{
-					id:`element-1-${stepId}`,
+                    id: `element-1-${stepId}`,
 					items: [{
 							id:`item-31-${stepId}`,
                             title: 'Обычное',
@@ -180,31 +180,78 @@
 	}
 
 	let installationStep = function(stepId, price){
-	return {
-		id:stepId,
-		title:'Монтаж',
-		doubleWidthSizeInMidle:true,
-		calcFunc:'priceMultiplyByAreaSizeCalc',
-		stepElements:[
-			{
-				id:`element-1-${stepId}`,
-				items:[
-					{
-						id:`item-1-element-1-${stepId}`,
-						title:'Надо',
-						price:price
-					},
-					{
-						id:`item-2-element-1-${stepId}`,
-						title:'Я сам поставлю',
-						isSelected:true
-					}
-				]
-			}
-		]
-	}
-}
-	
+	    return {
+		    id:stepId,
+		    title:'Монтаж',
+		    doubleWidthSizeInMidle:true,
+		    calcFunc:'priceMultiplyByAreaSizeCalc',
+		    stepElements:[
+			    {
+				    id:`element-1-${stepId}`,
+				    items:[
+					    {
+						    id:`item-1-element-1-${stepId}`,
+						    title:'Надо',
+						    price:price
+					    },
+					    {
+						    id:`item-2-element-1-${stepId}`,
+						    title:'Я сам поставлю',
+                            isSelected: true
+					    }
+				    ]
+			    }
+		    ]
+        }
+    }
+
+    let metringAndInstallationStep = function (stepId, metringPrice, installationPrice) {
+        return {
+            id: stepId,
+            title: 'Замер / Монтаж',
+            calcFunc: 'metringAndInstallationPriceCalc',
+            stepElements: [
+                {
+                    id: `element-60-${stepId}`,
+                    itemChange: 'eventMetringElementChange',
+                    title: 'Замер',
+                    items: [
+                        {
+                            id: `item-1-element-60-${stepId}`,
+                            title: 'Надо',
+                            price: metringPrice,
+                            enableElementId: `element-60-2-${stepId}`
+                        },
+                        {
+                            id: `item-2-element-60-${stepId}`,
+                            title: 'Не надо',
+                            isSelected: true,
+                            desableElementId: `element-60-2-${stepId}`,
+                            selectItemId: `item-2-element-60-2-${stepId}`
+                        }
+                    ]
+                },
+                {
+                    id: `element-60-2-${stepId}`,
+                    itemChange: 'eventInstallingElementChange',
+                    title: 'Монтаж',
+                    items: [
+                        {
+                            id: `item-1-element-60-2-${stepId}`,
+                            title: 'Надо',
+                            price: installationPrice
+                        },
+                        {
+                            id: `item-2-element-60-2-${stepId}`,
+                            title: 'Я сам поставлю',
+                            isSelected: true
+                        }
+                    ]
+                }
+            ]
+        };
+    }
+
 	
 
 	return {
@@ -718,54 +765,30 @@
 									calcFunc:'mountingTypeCalc',
 									stepElements:[
 										{
-											id:'element-52',
+                                            id: 'element-52',
 											items:[{
 												id:'item-53',
 												title:'Клей',
 												itemType:'glue',
-												info:'Использование данного типа крепления требует выровненные и предварительно подготовленные поверхности стен. Необходимо учитывать, что в случае необходимости демонтировать изделие, данные работы будет выполнить достаточно сложно.',
-												isSelected:true
+												info:'Использование данного типа крепления требует выровненные и предварительно подготовленные поверхности стен. Необходимо учитывать, что в случае необходимости демонтировать изделие, данные работы будет выполнить достаточно сложно.'
 											},
 											{
 												id:'item-54',
-												title:'Сквозное',
+												title:'Отверстия под крепления',
 												itemType:'drilling',
 												info:'Для такого крепежа в стекле высверливаются отверстия и изделие закрепляется на стену посредством специальных крепежей. '
+                                            },
+											{
+											    id: 'item-55',
+											    title: 'Без отверстий',
+                                                itemType: 'withoutDrilling',
+											    isSelected: true
 											}]
 										}
 									]
-								},
-								{
-									id:'step-59',
-									title:'Замер',
-									info:'В случае дальнейшего заключении Договора сумма замера вычитается из общей стоимости Договора',
-									calcFunc:'defaultCalc',
-									stepElements:[
-										{
-											id:'element-60',
-											itemChange:'eventRefreshSteps',
-											items:[
-												{
-													id:'item-62',
-													title:'Надо',
-													price:calculatorConfig.SKINALI_METRING_PRICE,
-													childSteps:[
-														delivetyStep('step-59-2', calculatorConfig.SKINALI_DELIVERY_PRICE),
-														installationStep('step-59-3', calculatorConfig.SKINALI_INSTALATION_PRICE)
-													]
-												},
-												{
-													id:'item-63',
-													title:'Не надо',
-													isSelected:true,
-													childSteps:[
-														delivetyStep('step-59-4', calculatorConfig.SKINALI_DELIVERY_PRICE)
-													]
-												}
-											]
-										}
-									]
-								}
+                                },
+                                metringAndInstallationStep('step-59', calculatorConfig.SKINALI_METRING_PRICE, calculatorConfig.SKINALI_INSTALATION_PRICE),
+		                        delivetyStep('step-59-2', calculatorConfig.SKINALI_DELIVERY_PRICE)							
 							]
 						},
 						{
