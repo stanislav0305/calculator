@@ -38,7 +38,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
-<!-- <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-form-validator/2.3.26/jquery.form-validator.min.js"></script> -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-form-validator/2.3.26/jquery.form-validator.min.js"></script>
 
 <script src="js/lib/underscore-min.js" type="text/javascript"></script>
 <script src="js/libConfig.js" type="text/javascript"></script>
@@ -133,19 +133,44 @@
                 <div class="form-group row mb-1">
                     <label for="client-name" class="col-sm-3 col-form-label">Имя</label>
                     <div class="col-sm-9">
-                        <input id="client-name" name="name" type="text" class="form-control form-control-sm" value="{{totalPriceBlock.orderSendBlock.client.name}}" />
+                        <input id="client-name" name="name" type="text" class="form-control form-control-sm"
+                               data-validation="required"
+                               data-validation-length="range[1;100]"
+                               value="{{totalPriceBlock.orderSendBlock.client.name}}" />
                     </div>
                 </div>
                 <div class="form-group row mb-1">
                     <label for="client-surname" class="col-sm-3 col-form-label">Фамилия</label>
                     <div class="col-sm-9">
-                        <input id="client-surname" name="surname" type="text" class="form-control form-control-sm" value="{{totalPriceBlock.orderSendBlock.client.surname}}" />
+                        <input id="client-surname" name="surname" type="text" class="form-control form-control-sm"
+                               data-validation="required"
+                               data-validation-length="range[1;100]"
+                               value="{{totalPriceBlock.orderSendBlock.client.surname}}" />
                     </div>
                 </div>
                 <div class="form-group row mb-1">
                     <label for="client-phone" class="col-sm-3 col-form-label">Телефон</label>
                     <div class="col-sm-9">
-                        <input id="client-phone" name="phone" type="phone" class="form-control form-control-sm" value="{{totalPriceBlock.orderSendBlock.client.phone}}" />
+                        <input id="client-phone" name="phone" type="phone" class="form-control form-control-sm" 
+                               data-validation="required"
+                               value="{{totalPriceBlock.orderSendBlock.client.phone}}" />
+                    </div>
+                </div>
+                <div class="form-group row mb-1">
+                    <label for="client-phone" class="col-sm-3 col-form-label">Чертёж</label>
+                    <div id="file-input-block-container" class="col-sm-9 text-left">
+                        <div class="btn-group">
+                            <div class="custom-file">
+                                <input id="client-drawing-0" type="file" accept=".jpg, .jpeg .pdf"
+                                       class="custom-file-input client-drawing"
+                                       input-number="0">
+                                <div class="input-group-prepend">
+                                    <label id="client-drawing-label-0" for="client-drawing-0" 
+                                           class="custom-file-label text-left" 
+                                           data-browse="Загрузить">Выбрать файл .jpg .jpeg .pdf</label>
+                                </div>
+                             </div>
+                        </div>
                     </div>
                 </div>
                 <div class="form-group row mb-1">
@@ -157,20 +182,38 @@
         </div>
     </div>
     <div id="sendProgressNotification" class="alert alert-primary position-absolute w-100 h-100 top-0-right-0 text-center
-         px-3 py-3" role="alert" style="display:none;">
+         px-3 py-3" role="alert" 
+         style="display:none; z-index:3">
         <h3 class="mt-5">Идёт отправка заказа...</h3>
     </div>
     <div id="sendErrorNotification" class="alert alert-danger position-absolute w-100 h-100 top-0-right-0 text-center
-         px-3 py-3" role="alert" style="display:none;">
+         px-3 py-3" role="alert" 
+         style="display:none; z-index:3">
         <h3 class="mt-5">При отправке заказа произошла ошибка</h3>
         <hr>
         <p id="sendErrorText">...</p>
     </div>
-    <div id="sendFinishNotification" class="alert alert-success position-absolute w-100 h-100 top-0-right-0 text-center
-         px-3 py-3" role="alert" style="display:none;">
+    <div id="sendFinishNotification"class="alert alert-success position-absolute w-100 h-100 top-0-right-0 text-center
+         px-3 py-3" role="alert" 
+         style="display:none; z-index:3;">
         <h3 class="mt-5">Ваш заказ отправлен</h3>
         <hr>
         <p>Наш менеджер свяжется с вами в ближайшее время</p>
+    </div>
+</script>
+
+<script type="text/template" id="file-input-block">
+    <div id="file-input-block-{{number}}" class="btn-group">
+        <div class="custom-file">
+            <input id="client-drawing-{{number}}" type="file" accept=".jpg, .jpeg .pdf"
+                   class="custom-file-input client-drawing" 
+                   input-number="{{number}}">
+            <div class="input-group-prepend">
+                <label  id="client-drawing-label-{{number}}" for="client-drawing-{{number}}" 
+                       class="custom-file-label text-left" data-browse="Загрузить">Выбрать файл .jpg .jpeg .pdf</label>
+            </div>
+        </div>
+        <button type="button" class="file-input-block-remove-btn btn btn-sm btn-danger" input-number="{{number}}">x</button>
     </div>
 </script>
 
@@ -185,6 +228,19 @@
         <p>Сумма заказа: <b>{{totalPrice}} &euro;</b></p>
         <hr>   
     </div>
+    [[ if (fileNames.length > 0){ ]]
+    <div>       
+        <h4>Приложены чертежи</h4>
+        <div>
+            [[_(fileNames).each(function(fileName) { ]]
+
+            <p>{{fileName}}</p>
+
+            [[ }) ]]
+            
+        </div>
+    </div>
+    [[ } ]]
     <div>
         <h3>Расчёт суммы:</h3>
         [[ let rowIndex = 1;]]

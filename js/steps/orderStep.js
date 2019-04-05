@@ -693,7 +693,8 @@
 			orderStepRender.removeEventFocusOutCabinTypeSize();
 
             totalPriceStep.removeOrderBtnEvent();
-		    totalPriceStep.removeOrderFormSubmitEvent();
+            totalPriceStep.removeOrderFormSubmitEvent();
+		    totalPriceStep.removeClientDravingChangeEvents();
 
 			$('.calculator').empty();
 		},

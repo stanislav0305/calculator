@@ -91,7 +91,7 @@
         //-----------------------------
 
         //выводить лог в консоль
-        PRINT_LOG_TO_CONSOLE_ON: true,
+        PRINT_LOG_TO_CONSOLE_ON: isLocalhost === true ? false : true,
 
         //-----------------------------
 

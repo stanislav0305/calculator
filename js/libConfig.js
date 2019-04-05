@@ -1,11 +1,11 @@
 var libConfigModule = (function() {
-    /*
+    
     let initJQueryValidation = function() {
         $.validate({
             modules: 'html5',
             decimalSeparator: '.'
         });
-    }; */
+    }; 
 
     let initUnderscore = function () {
         
@@ -18,7 +18,7 @@ var libConfigModule = (function() {
 
     let module = {
         init: function () {
-         //   initJQueryValidation();
+            initJQueryValidation();
             initUnderscore();
         }
     };
