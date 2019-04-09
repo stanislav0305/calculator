@@ -4,9 +4,10 @@
     "\\css",
     "\\js",
     "\\js\\lib",
+    "\\js\\lib\\jquery-validation-1.19.0",
     "\\js\\steps",
     "\\js\\utils"
   ],
-  "SelectedNode": "\\js\\calculator.js",
+  "SelectedNode": "\\js\\libConfig.js",
   "PreviewInSolutionExplorer": false
 }
