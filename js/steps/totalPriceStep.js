@@ -203,7 +203,7 @@
                     return;
                 }
 
-                //if replace file
+                //if nned replace file
                 let currentFileSize = $fileInput.attr("file-size-in-bytes");
                 if (currentFileSize === undefined) {
                     currentFileSize = 0;
@@ -295,25 +295,29 @@
                 showErrors: function(errorMap, errorList) {
                     $(".tooltipe-form-error").remove();
 
-                    _.each(errorList,
-                        function(item) {
-                            let errorContainerId = "tooltipe-form-error-container-id-" + item.element.name;
-                            let errorLabelId = "tooltipe-form-error-lable-id-" + item.element.name;
+                    _.each(errorList, function(item) {
+                        let errorContainerId = "tooltipe-form-error-container-id-" + item.element.name;
+                        let errorLabelId = "tooltipe-form-error-lable-id-" + item.element.name;
 
-                            if ($(`#${errorContainerId}`).length === 0) {
-                                let data = {
-                                    containerId: errorContainerId,
-                                    labelId: errorLabelId,
-                                    errorMessage: item.message
-                                };
-                                let html = templateHelper.getTemplateResult("tooltipe-form-error", data);
-                                $(item.element).parent().append(html);
-                            } else {
-                                $(`#${errorLabelId}`).html(item.message);
-                            }
-                        });
+                        if ($(`#${errorContainerId}`).length === 0) {
+                            let data = {
+                                containerId: errorContainerId,
+                                labelId: errorLabelId,
+                                errorMessage: item.message
+                            };
+                            let html = templateHelper.getTemplateResult("tooltipe-form-error", data);
+                            $(item.element).parent().append(html);
+                        } else {
+                            $(`#${errorLabelId}`).html(item.message);
+                        }
+                    });
                 }
-        }); 
+                /*,
+                submitHandler: function (form) {
+                    sendOrderEmail();
+                }*/
+            }); 
+
             
             $(document).on('submit', "#sendOrderForm", function (event) {
                 event.preventDefault();
