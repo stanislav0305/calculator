@@ -188,3 +188,8 @@ color: inherit;
 .error {
     color: #ff0000;
 }
+
+.custom-file-label {
+    overflow: hidden;
+    white-space: nowrap;
+}
