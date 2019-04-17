@@ -1,4 +1,4 @@
-var metringAndInstallationStepModule = (function() {
+let metringAndInstallationStepModule = (function() {
     let templateHelper;
     let orderStepsHelper;
     let calcHelper;
@@ -6,114 +6,118 @@ var metringAndInstallationStepModule = (function() {
     let eventMetringElements = [];
     let eventInstallingElements = [];
 
-    let switsInstalationRadio = function (selectedItem) {
+    const switsInstalationRadio = function(selectedItem) {
         if (selectedItem.selectItemId !== undefined) {
             $(`#${selectedItem.selectItemId}`).click();
         }
 
         if (selectedItem.enableElementId !== undefined) {
-            let $inputs = $(`input:radio[name^="${selectedItem.enableElementId}"]`);
+            const $inputs = $(`input:radio[name^="${selectedItem.enableElementId}"]`);
             $inputs.removeClass("disabled");
             $inputs.removeAttr("disabled");
         }
 
         if (selectedItem.desableElementId !== undefined) {
-            let $inputs = $(`input:radio[name^="${selectedItem.desableElementId}"]`);
+            const $inputs = $(`input:radio[name^="${selectedItem.desableElementId}"]`);
             $inputs.addClass("disabled");
-            $inputs.attr('disabled', 'disabled');
+            $inputs.attr("disabled", "disabled");
         }
-    }
+    };
 
-    let module = {
-		renderMetringBlock: function(element, stepId) {
-		    let data = {
-		        id: element.id,
-		        title: element.title,
-		        items: element.items,
-		        stepId: stepId
-		    };
+    const module = {
+        renderMetringBlock: function(element, stepId) {
+            const data = {
+                id: element.id,
+                title: element.title,
+                items: element.items,
+                stepId: stepId
+            };
 
-			let html = templateHelper.getTemplateResult("metring-elment-block", data);
-			$(`#${stepId}`).append(html);
+            const html = templateHelper.getTemplateResult("metring-elment-block", data);
+            $(`#${stepId}`).append(html);
 
-		    this.setEventMetringElementChange(element.id);
-		},
-		renderInstalationBlock: function (element, step) {		   
-		    let data = {
-		        id: element.id,
-		        title: element.title,
-		        items: element.items,
-		        stepId: step.id
-		    };
+            this.setEventMetringElementChange(element.id);
+        },
+        renderInstalationBlock: function(element, step) {
+            const data = {
+                id: element.id,
+                title: element.title,
+                items: element.items,
+                stepId: step.id
+            };
 
-            let html = templateHelper.getTemplateResult("instalation-elment-block", data);
+            const html = templateHelper.getTemplateResult("instalation-elment-block", data);
             $(`#${step.id}`).append(html);
 
-		    let selectedMetringItem = _.find(step.stepElements[0].items, function (item) {
-		            return item.isSelected;
-		    });
+            const selectedMetringItem = _(step.stepElements[0].items).find(item => {
+                return item.isSelected;
+            });
 
-		    switsInstalationRadio(selectedMetringItem);
+            switsInstalationRadio(selectedMetringItem);
 
-		    this.setEventInstallingElementChange(element.id);
-		},
-		
-		setEventMetringElementChange: function (elementId) {
-		    eventMetringElements.push(elementId);
-		    $(document).on('change', `input:radio[name^="${elementId}"]`, function (event) {
-		        let stepId = $(this).attr('step-id');
-		        let elementId = $(this).attr('name');
-		        let itemId = this.id;
+            this.setEventInstallingElementChange(element.id);
+        },
 
-		        let setp = orderStepsHelper.getStepOrNull(stepId);
-		        let element = orderStepsHelper.getStepElementOrNull(setp, elementId);
+        setEventMetringElementChange: function(inputRadionElementId) {
+            eventMetringElements.push(inputRadionElementId);
+            $(document).on("change",
+                `input:radio[name^="${inputRadionElementId}"]`,
+                function() {
+                    const stepId = $(this).attr("step-id");
+                    const elementId = $(this).attr("name");
+                    const itemId = this.id;
 
-		        orderStepsHelper.unselectElementItems(element.items);
-		        let selectedItem = orderStepsHelper.selectElementItem(element.items, itemId);
+                    const setp = orderStepsHelper.getStepOrNull(stepId);
+                    const element = orderStepsHelper.getStepElementOrNull(setp, elementId);
 
-		        switsInstalationRadio(selectedItem);
+                    orderStepsHelper.unselectElementItems(element.items);
+                    const selectedItem = orderStepsHelper.selectElementItem(element.items, itemId);
 
-		        calcHelper.recalcAll();
-		    });
-		},
-		removeEventMetringElementChange: function () {
-		    for (let i = 0; i < eventMetringElements.length; i++) {
-		        $(document).off('change', `input:radio[name^="${eventMetringElements[i]}"]`);
-		    }
+                    switsInstalationRadio(selectedItem);
 
-		    eventMetringElements = [];
-		},
+                    calcHelper.recalcAll();
+                });
+        },
+        removeEventMetringElementChange: function() {
+            _(eventMetringElements).each(element => {
+                $(document).off("change", `input:radio[name^="${element}"]`);
+            });
+
+            eventMetringElements = [];
+        },
 
 
-		setEventInstallingElementChange: function (elementId) {
-		    eventInstallingElements.push(elementId);
-		    $(document).on('change', `input:radio[name^="${elementId}"]`, function (event) {
-		        let stepId = $(this).attr('step-id');
-		        let elementId = $(this).attr('name');
-		        let itemId = this.id;
+        setEventInstallingElementChange: function(inputRadioElementId) {
+            eventInstallingElements.push(inputRadioElementId);
+            $(document).on("change",
+                `input:radio[name^="${inputRadioElementId}"]`,
+                function() {
+                    const stepId = $(this).attr("step-id");
+                    const elementId = $(this).attr("name");
+                    const itemId = this.id;
 
-		        let setp = orderStepsHelper.getStepOrNull(stepId);
-		        let element = orderStepsHelper.getStepElementOrNull(setp, elementId);
+                    const setp = orderStepsHelper.getStepOrNull(stepId);
+                    const element = orderStepsHelper.getStepElementOrNull(setp, elementId);
 
-		        orderStepsHelper.unselectElementItems(element.items);
-		        let selectedItem = orderStepsHelper.selectElementItem(element.items, itemId);
+                    orderStepsHelper.unselectElementItems(element.items);
+                    orderStepsHelper.selectElementItem(element.items, itemId);
 
-		        calcHelper.recalcAll();
-		    });
-		},
-		removeEventInstallingElementChange: function () {
-		    for (let i = 0; i < eventInstallingElements.length; i++) {
-		        $(document).off('change', `input:radio[name^="${eventInstallingElements[i]}"]`);
-		    }
+                    calcHelper.recalcAll();
+                });
+        },
+        removeEventInstallingElementChange: function() {
+            _(eventInstallingElements).each(element => {
+                $(document).off("change", `input:radio[name^="${element}"]`);
+            });
 
-		    eventInstallingElements = [];
-		},
-		init: function (orderStepsHelperModule, templateHelperModule, calcHelperModule) {
-		    orderStepsHelper = orderStepsHelperModule;
-		    templateHelper = templateHelperModule;
-		    calcHelper = calcHelperModule;
-		}
-	};
+            eventInstallingElements = [];
+        },
+        init: function(orderStepsHelperModule, templateHelperModule, calcHelperModule) {
+            orderStepsHelper = orderStepsHelperModule;
+            templateHelper = templateHelperModule;
+            calcHelper = calcHelperModule;
+        }
+    };
 
     return module;
 }());

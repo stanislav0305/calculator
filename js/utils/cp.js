@@ -1,17 +1,17 @@
-var consolePrinterModule = (function () {
+let consolePrinterModule = (function() {
     let calculatorConfig;
 
-    let module = {
-        print: function (logger) {
+    const module = {
+        print: function(logger) {
             if (calculatorConfig.PRINT_LOG_TO_CONSOLE_ON !== true) {
                 return;
             }
 
-            for (let i = 0; i < logger.log.length; i++) {
-                console.log(logger.log[i].message);
-            }
+            _(logger.log).each(logRow => {
+                console.log(logRow.message);
+            });
         },
-        init: function (calculatorConfigModule) {
+        init: function(calculatorConfigModule) {
             calculatorConfig = calculatorConfigModule;
         }
     };

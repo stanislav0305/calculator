@@ -1,22 +1,22 @@
-﻿var totalPriceStepModule = (function() {
+﻿let totalPriceStepModule = (function() {
     let templateHelper;
     let orderStepsHelper;
     let mailSender;
     let calculatorConfig;
     let calcHelper;
+    let miscHelper;
 
-    let clientDravingCount = 1;
-    const CLIENT_DRAVING_MAX_COUNT = 10;
-    let clientDravingNumber = 0;
-    let clientDravingTotalFilesSizeInBytes = 0;
-    const CLIENT_DRAVING_MAX_TOTAL_FILES_SIZE_IN_BYTES = 25 * 1000000; // 25 Mb
+    const dravingManager = {
+        dravingCount: 1,
+        currentNumber: 0,
+        totalFilesSizeInBytes: 0
+    };
 
-    let getBase64String = function(inputElement) {
-        var deferred = $.Deferred();
-
-        var files = inputElement.get(0).files;
+    const getBase64String = function(inputElement) {
+        const deferred = $.Deferred();
+        const files = inputElement.get(0).files;
         if (files && files[0]) {
-            var fr = new FileReader();
+            const fr = new FileReader();
             fr.onload = function(e) {
                 deferred.resolve(e.target.result);
             };
@@ -28,77 +28,83 @@
         return deferred.promise();
     };
 
-    let getFileSize = function ($fileInput) {
-        var f = $fileInput.files[0];
-
+    const getFileSize = function($fileInput) {
+        const f = $fileInput.files[0];
         if (f.size !== undefined) {
             return f.size;
         }
 
         return f.fileSize;
-    }
+    };
 
-    let getAttachmentObj = function($fileInput) {
+    const getAttachmentObj = function($fileInput) {
         return {
             name: $fileInput.attr("file-name"),
             data: $fileInput.attr("base64-file-string")
         };
     };
 
-    let getAttachments = function ($fileInputs) {
-        let attachments = [];
-        _.each($fileInputs, function (fileInput) {
-            let $fileInput = $(fileInput);
-            if ($fileInput.attr("file-name") != undefined && $fileInput.attr("file-name") !== "") {
-                let attachment = getAttachmentObj($fileInput);
-                attachments.push(attachment);
-            }
+    const getAttachments = function($fileInputs) {
+        const attachments = [];
+        const filtredInputs = _($fileInputs).filter(fileInput => {
+            const $fileInput = $(fileInput);
+            return $fileInput.attr("file-name") != undefined && $fileInput.attr("file-name") !== "";
+        });
+
+        _(filtredInputs).each(fileInput => {
+            const $fileInput = $(fileInput);
+            const attachment = getAttachmentObj($fileInput);
+            attachments.push(attachment);
         });
 
         return attachments;
-    }
+    };
 
-    let appendCliendDravingBlock = function() {
-        clientDravingCount = clientDravingCount + 1;
-        clientDravingNumber = clientDravingNumber + 1;
+    const appendCliendDravingBlock = function() {
+        dravingManager.dravingCount = dravingManager.dravingCount + 1;
+        dravingManager.currentNumber = dravingManager.currentNumber + 1;
 
-        let data = {
-            number: clientDravingNumber
+        const data = {
+            number: dravingManager.currentNumber
         };
-        let html = templateHelper.getTemplateResult("file-input-block", data);
+        const html = templateHelper.getTemplateResult("file-input-block", data);
         $("#file-input-block-container").append(html);
     };
 
-    let sendOrderEmail = function() {
-        let client = module.getFormData("#sendOrderForm");
-        let totalPrice = $('#totalPrice').text();
-        let log = calcHelper.getLogger().getFiltredLog();
-        let attachments = getAttachments($(".client-drawing"));
+    const hideSendForm = function() {
+        $("#orderBtn").removeClass("invisible").addClass("visible");
+        $("#sendOrderForm").removeClass("visible").addClass("invisible");
+    };
 
-        let fileNames = _($(".client-drawing"))
-            .map(function (fileInput) {
-                let fileName = $(fileInput).attr("file-name");
+    const sendOrderEmail = function() {
+        const client = miscHelper.getFormData("#sendOrderForm");
+        const totalPrice = $("#totalPrice").text();
+        const log = calcHelper.getLogger().getFiltredLog();
+        const attachments = getAttachments($(".client-drawing"));
+
+       const mappedFilenames = _($(".client-drawing")).map(fileInput => {
+                const fileName = $(fileInput).attr("file-name");
                 return fileName;
-            })
-            .filter(function (fileName) {
+            });
+
+       const fileNames = _(mappedFilenames).filter(function(fileName) {
                 return (fileName != undefined && fileName !== "");
             });
 
-
-        let mailData = mailSender.createOrderMailDataObj(client, totalPrice, fileNames, log, attachments);
+       const mailData = mailSender.createOrderMailDataObj(client, totalPrice, fileNames, log, attachments);
 
         $("#sendProgressNotification").fadeIn(2000,
-            function () {
-                let promise = mailSender.send(mailData);
+            function() {
+                const promise = mailSender.send(mailData);
                 promise.then(
                     message => {
                         $("#sendProgressNotification").fadeOut(500);
                         if (message === "OK") {
                             $("#sendFinishNotification")
                                 .fadeIn(500,
-                                function () {
-                                    module.hideSendForm();
-                                })
+                                    function() {
+                                        hideSendForm();
+                                    })
                                 .delay(5000)
                                 .fadeOut(2000, "linear");
                         } else {
@@ -116,167 +122,176 @@
             });
     };
 
-    
 
-    let module = {
+    const module = {
         totalPriceBlock: function(element, stepId) {
             if (element.totalPriceBlock !== undefined) {
-                let data = {
+                const data = {
                     stepId: stepId,
                     elementId: element.id,
                     totalPriceBlock: element.totalPriceBlock,
                     showOrderButton: calculatorConfig.SHOW_ORDER_BUTTON
                 };
-                let html = templateHelper.getTemplateResult("total-price-block", data);
+                const html = templateHelper.getTemplateResult("total-price-block", data);
                 $(`#${stepId}`).append(html);
 
                 module.setOrderBtnEvent();
                 module.setOrderFormSubmitEvent();
 
-                clientDravingCount = 1;
-                clientDravingNumber = 0;
+                dravingManager.dravingCount = 1;
+                dravingManager.currentNumber = 0;
                 module.setClientDravingChangeEvent();
             }
         },
         setTotalPrice: function(totalPrice) {
-            $('#totalPrice').text(totalPrice.toFixed(2));
+            $("#totalPrice").text(totalPrice.toFixed(2));
         },
         setOrderBtnEvent: function() {
-            $(document).on('click', '#orderBtn', function(event) {
-                let stepId = $(this).attr('step-id');
-                let elementId = $(this).attr('element-id');
+            $(document).on("click",
+                "#orderBtn",
+                function() {
+                    const stepId = $(this).attr("step-id");
+                    const elementId = $(this).attr("element-id");
 
-                let step = orderStepsHelper.getStepOrNull(stepId);
-                let element = orderStepsHelper.getStepElementOrNull(step, elementId);
+                    const step = orderStepsHelper.getStepOrNull(stepId);
+                    const element = orderStepsHelper.getStepElementOrNull(step, elementId);
 
-                element.totalPriceBlock.orderSendBlock.showSendForm = true;
+                    element.totalPriceBlock.orderSendBlock.showSendForm = true;
 
-                module.showSendForm();
-            });
+                    module.showSendForm();
+                });
         },
         removeOrderBtnEvent: function() {
-            $(document).off('click', '#orderBtn');
+            $(document).off("click", "#orderBtn");
         },
         showSendForm: function() {
-            $("#orderBtn").removeClass("visible").addClass("invisible");
-            $("#sendOrderForm").removeClass("invisible").addClass("visible");
+            $("#orderBtn")
+                .removeClass("visible")
+                .addClass("invisible");
+
+            $("#sendOrderForm")
+                .removeClass("invisible")
+                .addClass("visible");
         },
-        hideSendForm: function() {
-            $("#orderBtn").removeClass("invisible").addClass("visible");
-            $("#sendOrderForm").removeClass("visible").addClass("invisible");
-        },
-        getFormData: function(dom_query) {
-            let out = {};
-            let s_data = $(dom_query).serializeArray();
+        setClientDravingChangeEvent: function() {
 
-            for (let i = 0; i < s_data.length; i++) {
-                let record = s_data[i];
-                out[record.name] = record.value;
-            }
-            return out;
-        },
-        setClientDravingChangeEvent: function () {
-           
-            $(document).on("change", ".client-drawing", function() {
-                let $fileInput = $(this);
-                let fileName = $fileInput.val().split("\\").pop();
+            $(document).on("change",
+                ".client-drawing",
+                function() {
+                    const $fileInput = $(this);
+                    let fileName = $fileInput.val().split("\\").pop();
 
-                var idxDot = fileName.lastIndexOf(".") + 1;
-                var extFile = fileName.substr(idxDot, fileName.length).toLowerCase();
-                if (extFile !== "jpg" && extFile !== "jpeg" && extFile !== "pdf") {
-                    alert("Можно загружать только jpg/jpeg или pdf файлы!");
-                    $fileInput.val("");
-                    return;
-                }
+                    const idxDot = fileName.lastIndexOf(".") + 1;
+                    const extFile = fileName.substr(idxDot, fileName.length).toLowerCase();
+                    if (extFile !== "jpg" && extFile !== "jpeg" && extFile !== "pdf") {
+                        alert("Можно загружать только jpg/jpeg или pdf файлы!");
+                        $fileInput.val("");
+                        return;
+                    }
 
-                let fileSize = getFileSize($fileInput[0]);
+                    const fileSize = getFileSize($fileInput[0]);
 
-                if (fileSize > CLIENT_DRAVING_MAX_TOTAL_FILES_SIZE_IN_BYTES) {
-                    alert(`Размер файла не может привышать ${CLIENT_DRAVING_MAX_TOTAL_FILES_SIZE_IN_BYTES / 1000000} Мб`);
-                    $fileInput.val("");
-                    return;
-                }
+                    if (fileSize > calculatorConfig.CLIENT_DRAVING_TOTAL_FILES_MAX_SIZE_IN_BYTES) {
+                        alert(`Размер файла не может привышать ${calculatorConfig
+                            .CLIENT_DRAVING_TOTAL_FILES_MAX_SIZE_IN_BYTES /
+                            1000000} Мб`);
+                        $fileInput.val("");
+                        return;
+                    }
 
-                if (clientDravingTotalFilesSizeInBytes + fileSize > CLIENT_DRAVING_MAX_TOTAL_FILES_SIZE_IN_BYTES) {
-                    alert(`Общий объём приложенных файлов не может привышать ${CLIENT_DRAVING_MAX_TOTAL_FILES_SIZE_IN_BYTES / 1000000} Мб`);
-                    $fileInput.val("");
-                    return;
-                }
+                    if (dravingManager.totalFilesSizeInBytes + fileSize >
+                        calculatorConfig.CLIENT_DRAVING_TOTAL_FILES_MAX_SIZE_IN_BYTES) {
+                        alert(`Общий объём приложенных файлов не может привышать ${calculatorConfig
+                            .CLIENT_DRAVING_TOTAL_FILES_MAX_SIZE_IN_BYTES /
+                            1000000} Мб`);
+                        $fileInput.val("");
+                        return;
+                    }
 
-                //if nned replace file
-                let currentFileSize = $fileInput.attr("file-size-in-bytes");
-                if (currentFileSize === undefined) {
-                    currentFileSize = 0;
-                }
-                clientDravingTotalFilesSizeInBytes = clientDravingTotalFilesSizeInBytes - currentFileSize;
-                $fileInput.attr("file-size-in-bytes", 0);
+                    //if nned replace file
+                    let currentFileSize = $fileInput.attr("file-size-in-bytes");
+                    if (currentFileSize === undefined) {
+                        currentFileSize = 0;
+                    }
+                    dravingManager.totalFilesSizeInBytes = dravingManager.totalFilesSizeInBytes - currentFileSize;
+                    $fileInput.attr("file-size-in-bytes", 0);
 
-                getBase64String($fileInput).done(function (base64Data) {
-                    let inputNumber = $fileInput.attr("input-number");
-                    fileName = `${inputNumber}-${fileName}`;
+                    getBase64String($fileInput).done(function(base64Data) {
+                        const inputNumber = $fileInput.attr("input-number");
+                        fileName = `${inputNumber}-${fileName}`;
 
-                    $fileInput.attr("base64-file-string", base64Data);
-                    $fileInput.attr("file-name", fileName);
-                    $fileInput.attr("file-size-in-bytes", fileSize);
-                    clientDravingTotalFilesSizeInBytes = clientDravingTotalFilesSizeInBytes + fileSize;
+                        $fileInput
+                            .attr("base64-file-string", base64Data)
+                            .attr("file-name", fileName)
+                            .attr("file-size-in-bytes", fileSize);
 
-                    $(`#client-drawing-label-${inputNumber}`)
-                        .addClass("selected").html(fileName);
+                        dravingManager.totalFilesSizeInBytes = dravingManager.totalFilesSizeInBytes + fileSize;
 
-                    let emptyInputCount = _.filter($('.client-drawing'),
-                        function (input) {
+                        $(`#client-drawing-label-${inputNumber}`)
+                            .addClass("selected")
+                            .html(fileName);
+
+                        const emptyInputCount = _($(".client-drawing")).filter(input => {
                             return !input.value;
                         }).length;
 
-                    if (clientDravingCount < CLIENT_DRAVING_MAX_COUNT && emptyInputCount === 0) {
+                        if (dravingManager.dravingCount < calculatorConfig.CLIENT_DRAVING_FILES_MAX_COUNT &&
+                            emptyInputCount === 0) {
+                            appendCliendDravingBlock();
+                        }
+                    });
+                });
+
+            $(document).on("click",
+                ".file-input-block-remove-btn",
+                function() {
+                    const inputNumber = $(this).attr("input-number");
+
+                    let fileSize = $(`#client-drawing-${inputNumber}`).attr("file-size-in-bytes");
+                    if (fileSize === undefined) {
+                        fileSize = 0;
+                    }
+
+                    $(`#file-input-block-${inputNumber}`).remove();
+                    dravingManager.dravingCount = dravingManager.dravingCount - 1;
+                    dravingManager.totalFilesSizeInBytes = dravingManager.totalFilesSizeInBytes - fileSize;
+
+                    const emptyInputCount = _($(".client-drawing")).filter(input => {
+                            return !input.value;
+                        }).length;
+
+                    if (emptyInputCount === 0) {
                         appendCliendDravingBlock();
                     }
                 });
-            });
 
-            $(document).on("click", ".file-input-block-remove-btn", function() {
-                let inputNumber = $(this).attr("input-number");
+            $(document).on("click",
+                ".file-input-block-clear-btn",
+                function() {
+                    const inputNumber = $(this).attr("input-number");
 
-                let fileSize = $(`#client-drawing-${inputNumber}`).attr("file-size-in-bytes");
-                if (fileSize === undefined) {
-                    fileSize = 0;
-                }
+                    let fileSize = $(`#client-drawing-${inputNumber}`).attr("file-size-in-bytes");
 
-                $(`#file-input-block-${inputNumber}`).remove();
-                clientDravingCount = clientDravingCount - 1;
-                clientDravingTotalFilesSizeInBytes = clientDravingTotalFilesSizeInBytes - fileSize;
+                    if (fileSize === undefined) {
+                        fileSize = 0;
+                    }
+                    dravingManager.totalFilesSizeInBytes = dravingManager.totalFilesSizeInBytes - fileSize;
 
-                let emptyInputCount = _.filter($('.client-drawing'),
-                    function(input) {
-                        return !input.value;
-                    }).length;
+                    $(`#client-drawing-${inputNumber}`)
+                        .val("")
+                        .attr("base64-file-string", "")
+                        .attr("file-name", "")
+                        .attr("file-size-in-bytes", 0);
 
-                if (emptyInputCount === 0) {  // max 10 files
-                    appendCliendDravingBlock();
-                }
-            });
-
-            $(document).on("click", ".file-input-block-clear-btn", function () {
-                let inputNumber = $(this).attr("input-number");
-
-                let fileSize = $(`#client-drawing-${inputNumber}`).attr("file-size-in-bytes");
-                if (fileSize === undefined) {
-                    fileSize = 0;
-                }
-                clientDravingTotalFilesSizeInBytes = clientDravingTotalFilesSizeInBytes - fileSize;
-
-                $(`#client-drawing-${inputNumber}`).val("");
-                $(`#client-drawing-${inputNumber}`).attr("base64-file-string", "");
-                $(`#client-drawing-${inputNumber}`).attr("file-name", "");
-                $(`#client-drawing-${inputNumber}`).attr("file-size-in-bytes", 0);
-                $(`#client-drawing-label-${inputNumber}`).text("Выбрать файл .jpg .jpeg .pdf");
-            });
+                    $(`#client-drawing-label-${inputNumber}`)
+                        .text("Выбрать файл .jpg .jpeg .pdf");
+                });
         },
-        removeClientDravingChangeEvents: function () {
+        removeClientDravingChangeEvents: function() {
             $(document).off("change", ".client-drawing");
             $(document).off("click", ".file-input-block-remove-btn");
         },
-        setOrderFormSubmitEvent: function () {
+        setOrderFormSubmitEvent: function() {
             $("#sendOrderForm").validate({
                 rules: {
                     name: {
@@ -295,52 +310,51 @@
                 showErrors: function(errorMap, errorList) {
                     $(".tooltipe-form-error").remove();
 
-                    _.each(errorList, function(item) {
-                        let errorContainerId = "tooltipe-form-error-container-id-" + item.element.name;
-                        let errorLabelId = "tooltipe-form-error-lable-id-" + item.element.name;
+                    _(errorList).each(item => {
+                        const errorContainerId = `tooltipe-form-error-container-id-${item.element.name}`;
+                        const errorLabelId = `tooltipe-form-error-lable-id-${item.element.name}`;
 
                         if ($(`#${errorContainerId}`).length === 0) {
-                            let data = {
+                            const data = {
                                 containerId: errorContainerId,
                                 labelId: errorLabelId,
                                 errorMessage: item.message
                             };
-                            let html = templateHelper.getTemplateResult("tooltipe-form-error", data);
+                            const html = templateHelper.getTemplateResult("tooltipe-form-error", data);
                             $(item.element).parent().append(html);
                         } else {
                             $(`#${errorLabelId}`).html(item.message);
                         }
                     });
                 }
-                /*,
-                submitHandler: function (form) {
+            });
+
+            $(document).on("submit",
+                "#sendOrderForm",
+                function(event) {
+                    event.preventDefault();
                     sendOrderEmail();
-                }*/
-            }); 
-
-            
-            $(document).on('submit', "#sendOrderForm", function (event) {
-                event.preventDefault();
-
-                if ($("#sendOrderForm").valid() === true) {
-                    sendOrderEmail();
-                }
-
-                return false;
-            }); 
+                    return false;
+                });
         },
-        removeOrderFormSubmitEvent: function () {
-            $(document).off('submit', "#sendOrderForm");
+        removeOrderFormSubmitEvent: function() {
+            $(document).off("submit", "#sendOrderForm");
         },
 
-        init: function (templateHelperModule, orderStepsHelperModule, mailSenderModule, calculatorConfigModule, calcHelperModule) {
-	        templateHelper = templateHelperModule;
-	        orderStepsHelper = orderStepsHelperModule;
-	        mailSender = mailSenderModule;
-	        calculatorConfig = calculatorConfigModule;
+        init: function(templateHelperModule,
+            orderStepsHelperModule,
+            mailSenderModule,
+            calculatorConfigModule,
+            calcHelperModule,
+            miscHelperModule) {
+            templateHelper = templateHelperModule;
+            orderStepsHelper = orderStepsHelperModule;
+            mailSender = mailSenderModule;
+            calculatorConfig = calculatorConfigModule;
             calcHelper = calcHelperModule;
+            miscHelper = miscHelperModule;
         }
-	};
+    };
 
     return module;
 }());

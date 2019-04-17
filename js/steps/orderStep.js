@@ -72,7 +72,17 @@
 				});
 			}
 		},
-		renderTitle : function(stepTitle, stepInfo) {
+        renderTitle: function (stepTitle, stepInfo) {
+           
+            
+            const data = {
+                stepTitle: stepTitle,
+                tooltypeHtml: this.renderToolTip(stepInfo)
+            };
+            const html = templateHelper.getTemplateResult("element-title-block", data);
+            $(`#${_stepId}`).append(html);
+
+            /*
 			let titleContainer = $('<h5 clas="card-title">');
 			titleContainer.append(stepTitle);
 			
@@ -82,7 +92,7 @@
 				titleContainer.append(toolTip);
 			}
 			
-			titleContainer.appendTo(`#${_stepId}`);
+			titleContainer.appendTo(`#${_stepId}`);*/
 		},
 		renderElementTitle : function(elementTitle, elementInfo) {
 			let elementTitleElement = $(`<h6 class="card-subtitle mb-2 text-muted">${elementTitle}</div>`);
@@ -95,8 +105,13 @@
 			
 			elementTitleElement.appendTo(`#${_stepId}`);
 		},
-		renderToolTip:function(toolTipText){
-			return $(`<img src="img/question.png" alt="" class="float-right" data-toggle="tooltip" data-placement="top" title="${toolTipText}" />`)
+        renderToolTip: function (toolTipText) {
+            const data = {
+                title: toolTipText,
+            };
+            return templateHelper.getTemplateResult("tooltype-info-or-empty", data);
+            
+			//return $(`<img src="img/question.png" alt="" class="float-right" data-toggle="tooltip" data-placement="top" title="${toolTipText}" />`)
 		},
 		renderTextBlock:function(element){
 			if (element.textBlock !== undefined){

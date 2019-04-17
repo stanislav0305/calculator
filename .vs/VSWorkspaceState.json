@@ -1,13 +1,10 @@
 {
   "ExpandedNodes": [
     "",
-    "\\css",
     "\\js",
-    "\\js\\lib",
-    "\\js\\lib\\jquery-validation-1.19.0",
     "\\js\\steps",
     "\\js\\utils"
   ],
-  "SelectedNode": "\\js\\utils\\mailSender.js",
+  "SelectedNode": "\\js\\calculator.js",
   "PreviewInSolutionExplorer": false
 }

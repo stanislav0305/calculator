@@ -1,9 +1,9 @@
-var mailSenderModule = (function () {
+let mailSenderModule = (function() {
     let templateHelper;
     let calculatorConfig;
 
-    let getOrderMailBody = function (client, totalPrice, fileNames, logRows) {
-        let data = {
+    const getOrderMailBody = function(client, totalPrice, fileNames, logRows) {
+        const data = {
             clientName: client.name,
             clientSurname: client.surname,
             clientPhone: client.phone,
@@ -11,12 +11,12 @@ var mailSenderModule = (function () {
             fileNames: fileNames,
             logRows: logRows
         };
-        let html = templateHelper.getTemplateResult("order-mail", data);
+        const html = templateHelper.getTemplateResult("order-mail", data);
         return html;
     };
 
-    let module = {
-        createOrderMailDataObj: function (client, totalPrice, fileNames, logRows, attachments) {
+    const module = {
+        createOrderMailDataObj: function(client, totalPrice, fileNames, logRows, attachments) {
             return {
                 SecureToken: calculatorConfig.SEND_ORDER_SECURE_TOKEN,
                 To: calculatorConfig.SEND_ORDER_TO,
@@ -24,13 +24,13 @@ var mailSenderModule = (function () {
                 Subject: `${calculatorConfig.SEND_ORDER_SUBJECT} ${client.name} ${client.surname}`,
                 Body: getOrderMailBody(client, totalPrice, fileNames, logRows),
                 Attachments: attachments
-            }
+            };
         },
-        send: function (mailData) {
-            let promise = Email.send(mailData);
+        send: function(mailData) {
+            const promise = Email.send(mailData);
             return promise;
         },
-        init: function (templateHelperModule, calculatorConfigModule) {
+        init: function(templateHelperModule, calculatorConfigModule) {
             templateHelper = templateHelperModule;
             calculatorConfig = calculatorConfigModule;
         }

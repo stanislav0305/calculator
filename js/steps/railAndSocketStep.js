@@ -3,6 +3,7 @@
     let orderStepRender;
 	let orderStepsHelper;
 	let calcHelper;
+    let templateHelper;
 
     let module = { 
         renderRadioSocketsCount: function(element, stepId) {
@@ -10,6 +11,17 @@
                 orderStepRender.renderElementTitle(element.title, element.info);
             }
 
+            /*
+            const data = {
+               stepId: stepId,
+               element: element
+            };
+            const html = templateHelper.getTemplateResult("radio-sockets-count-block", data);
+            $(`#${stepId}`).append(html);
+
+
+            if (element.items !== undefined) {
+            */
             if (element.items !== undefined) {
                 let $container = $('<div class="container mb-4 px-0">');
                 let $row = $('<div class="row">');
@@ -19,7 +31,7 @@
                 $container.append($row);
                 $(`#${stepId}`).append($container);
 
-                element.items.forEach(function(item, index) {
+                element.items.forEach(function (item, index) {
                     let radioItemDiv = $('<div class="custom-control custom-radio">');
                     let chackedAtr = item.isSelected === true ? 'checked' : '';
                     radioItemDiv
@@ -36,7 +48,7 @@
                     $radio.append(radioItemDiv);
                 });
 
-                module.renderSocketCountElements(element, stepId);
+            module.renderSocketCountElements(element, stepId);
                 orderStepRender.radioSetEvents(element);
             }
         },
@@ -285,11 +297,12 @@
 	};
 	
 	return {
-		init:function(orderStepModule, orderStepsHelperModule, calcHelperModule){
+        init: function (orderStepModule, orderStepsHelperModule, calcHelperModule, templateHelperModule){
             orderStep = orderStepModule;
 		    orderStepRender = orderStep.orderStepRender;
             orderStepsHelper = orderStepsHelperModule;
-			calcHelper = calcHelperModule;
+            calcHelper = calcHelperModule;
+		    templateHelper = templateHelperModule;
 		},
 		renderRadioSocketsCount: module.renderRadioSocketsCount,
 		

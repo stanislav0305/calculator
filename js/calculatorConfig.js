@@ -1,5 +1,5 @@
-﻿var calculatorConfigModule = (function() {
-    let isLocalhost = ["localhost", "127.0.0.1", ""].includes(window.location.hostname);
+﻿let calculatorConfigModule = (function() {
+    const isLocalhost = ["localhost", "127.0.0.1", ""].includes(window.location.hostname);
 
     const module = {
         //-----------------------------
@@ -91,7 +91,7 @@
         //-----------------------------
 
         //выводить лог в консоль
-        PRINT_LOG_TO_CONSOLE_ON: isLocalhost === true ? false : true,
+        PRINT_LOG_TO_CONSOLE_ON: isLocalhost === true ? true : true,
 
         //-----------------------------
 
@@ -100,7 +100,7 @@
 
         //ключ для отправки мейлов сгенерированый на smtpJs.com
         SEND_ORDER_SECURE_TOKEN: "2a89635f-a426-414c-9cdd-4616b54b3fec",
-        
+
         //емайл отправителя эмайла с данными заказа к которому привязан ключ на smtpJs.com
         SEND_ORDER_FROM: "stasmainwork@gmail.com",
 
@@ -108,10 +108,16 @@
         SEND_ORDER_TO: isLocalhost === true ? "0305stas@inbox.lv" : "bugsy@inbox.lv",
 
         //subject отправителя эмайла с данными заказа
-        SEND_ORDER_SUBJECT: "Новый заказ от " 
+        SEND_ORDER_SUBJECT: "Новый заказ от ",
 
         //-----------------------------
-};
 
-return module;
+        //максимальное количество файлов с чертежами которое можно приложить к письму
+        CLIENT_DRAVING_FILES_MAX_COUNT: 10,
+        
+        //максимальный обём всех приложенных файлов с чертежами
+        CLIENT_DRAVING_TOTAL_FILES_MAX_SIZE_IN_BYTES: 25 * 1000000 // 25 Mb    
+    };
+
+    return module;
 }());

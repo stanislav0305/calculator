@@ -1,38 +1,37 @@
-var templateHelperModule = (function() {
+let templateHelperModule = (function() {
 
-    let tempalateDictionary = {
+    const tempalateDictionary = {
         compiledTemplates: [],
         get: function(templateId) {
-            let keyPair = _.find(tempalateDictionary.compiledTemplates,
-                function(item) {
-                    return item.id === templateId;
-                });
+            const keyPair = _(tempalateDictionary.compiledTemplates).find(item => {
+                return item.id === templateId;
+            });
 
             let compiledTemplate;
-            if (keyPair === undefined) {
-                let html = $(`#${templateId}`).html();
-                compiledTemplate = tempalateDictionary.add(templateId, html);
-            } else {
+            if (keyPair) {
                 compiledTemplate = keyPair.compiledTemplate;
+            } else {
+                const html = $(`#${templateId}`).html();
+                compiledTemplate = tempalateDictionary.add(templateId, html);
             }
 
             return compiledTemplate;
         },
-        add: function (id, html) {
-            let compiledTemplate = _.template(html);
+        add: function(id, html) {
+            const compiledTemplate = _.template(html);
             tempalateDictionary.compiledTemplates.push({ id: id, compiledTemplate: compiledTemplate });
 
             return compiledTemplate;
         }
-    }
+    };
 
-    let module = {
-        getTemplateResult: function (templateId, data) {
-            let result = tempalateDictionary.get(templateId);
+    const module = {
+        getTemplateResult: function(templateId, data) {
+            const result = tempalateDictionary.get(templateId);
 
             if (data !== undefined) {
                 return result(data);
-            } 
+            }
 
             return result;
         }
