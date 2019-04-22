@@ -186,7 +186,7 @@
 
                             if (socketsBlok.needPhotoPrinting === true) {
                                 socketBlockCountWithPhotoPrinting =
-                                    socketBlockCountWithPhotoPrinting * 1 + socketsBlok.blockCount * 1;
+                                    (socketBlockCountWithPhotoPrinting * 1) + (socketsBlok.blockCount * 1) * socketsBlok.number;
                             }
                         }
                     }
@@ -195,11 +195,14 @@
                 socketBlockWithPhotoPrintingTotalPrice = socketBlockCountWithPhotoPrinting *
                     calculatorConfig.SKINALI_PHOTO_PRINTING_ON_ONE_SOCKET_BLOCK_PRICE;
 
-                socketDrillingTotalPrice = socketCount * calculatorConfig.SKINALI_ONE_SOCKET_DRILLING_PRICE;
+                socketDrillingTotalPrice = socketCount *
+                    calculatorConfig.SKINALI_ONE_SOCKET_DRILLING_PRICE;
             }
-            logger.calcInfo(`колличество блоков резеток с фотопечатью(${socketBlockCountWithPhotoPrinting
-                }) * цена фотопечати на блоке(${calculatorConfig.SKINALI_PHOTO_PRINTING_ON_ONE_SOCKET_BLOCK_PRICE}) = ${
+
+            logger.calcInfo(`колличество резеток с фотопечатью(${socketBlockCountWithPhotoPrinting
+                }) * цена фотопечати на одной резетке(${calculatorConfig.SKINALI_PHOTO_PRINTING_ON_ONE_SOCKET_BLOCK_PRICE}) = ${
                 socketBlockWithPhotoPrintingTotalPrice}`);
+
             logger.calcInfo(`колличество выпилов под резетки(${socketCount}) * цена выпила(${calculatorConfig
                 .SKINALI_ONE_SOCKET_DRILLING_PRICE}) = ${socketDrillingTotalPrice}`);
 
