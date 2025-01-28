@@ -1,5 +1,5 @@
 ﻿export default (function() {
-    const isLocalhost = ["localhost", "127.0.0.1", ""].includes(window.location.hostname);
+    const isLocalhost = ["localhost", "127.0.0.1", "stanislav0305.github.io", ""].includes(window.location.hostname);
 
     const module = {
         //-----------------------------
@@ -105,7 +105,7 @@
         SEND_ORDER_FROM: "stasmainwork@gmail.com",
 
         //e-mail получателя письма с данными заказа
-        SEND_ORDER_TO: isLocalhost === true ? "0305stas@inbox.lv" : "bugsy@inbox.lv",
+        SEND_ORDER_TO: isLocalhost === true ? "0305stas@inbox.lv" : "",//"bugsy@inbox.lv",
 
         //subject отправителя e-mail с данными заказа
         SEND_ORDER_SUBJECT: "Новый заказ от ",
