@@ -1,0 +1,220 @@
+<!doctype html><html><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no"><title>Онлайн калькулятор для расчета скинали, рассчитать стоимость изготовления стеклянного фартука</title><link rel="icon" href="favicon.ico"><link href="chunk-67bfadb2.d14e14b3ac09a57b2a59.css" rel="stylesheet"><link href="index.95efd4974901456ff936.css" rel="stylesheet"></head><body><div class="container mb-2"><h4>Онлайн калькулятор для расчета скинали, рассчитать стоимость изготовления стеклянного фартука</h4><div class="calculator row"></div></div><script type="text/template" id="element-title-block"><h5 class="card-title">{{stepTitle}}{{toolTypeHtml}}</h5></script><script type="text/template" id="tool-type-info-or-empty">[[ if (title) { ]]
+    <div class="float-right question-img" data-toggle="tooltip" data-placement="top" title="{{title}}"></div>
+[[ } ]]</script><script type="text/template" id="metring-element-block"><h6 class="card-subtitle mb-2 text-muted">{{title}}</h6>
+    <div class="container mb-4 px-0">
+        <div class="row">
+            <div id="{{id}}" class="col">
+                [[_(items).each(function(item) {]]
+                    <div class="custom-control custom-radio">
+                        <input id="{{item.id}}" type="radio" class="custom-control-input"
+                               name="{{id}}" step-id="{{stepId}}"
+                               {{ item.isSelected === true ? "checked" : "" }}>
+                        <label for="{{item.id}}" class="custom-control-label">{{item.title}}</label>
+                    </div>
+                [[ }) ]]
+            </div>
+        </div>
+    </div></script><script type="text/template" id="installation-element-block"><h6 class="card-subtitle mb-2 text-muted">{{title}}</h6>
+    <div class="container mb-4 px-0">
+        <div class="row">
+            <div id="{{id}}" class="col">
+                [[_(items).each(function(item) {]]
+                <div class="custom-control custom-radio">
+                    <input id="{{item.id}}" type="radio" class="custom-control-input"
+                            name="{{id}}" step-id="{{stepId}}"
+                            {{item.isSelected === true ? "checked" : ""}}>
+                    <label for="{{item.id}}" class="custom-control-label">{{item.title}}</label>
+                </div>
+                [[ }) ]]
+            </div>
+        </div>
+    </div></script><script type="text/template" id="radio-sockets-count-block">[[if(element.items){ ]]
+        <div class="container mb-4 px-0">
+            <div class="row">
+                <div id="{{element.id}}" class="ml-3 mt-1 col">
+                    [[_(element.items).each( item => { ]]
+                        <div class="custom-control custom-radio">
+                            <input id="{{item.id}}" type="radio" class="custom-control-input" name="{{element.id}}" 
+                                   {{item.isSelected === true ? "checked" : ""}} step-id="{{stepId}}" />
+                            <label for="{{item.id}}" class="custom-control-label">{{item.title}}</label>
+                            {{templateHelperModule.getTemplateResult("tool-type-info-or-empty", { title: item.info})}}
+                        </div>
+                    [[ }) ]]
+                </div>
+                
+                <div id="sockets-count-${element.id}" class="mt-3">
+                    <div class="row">
+                        <div class="sockets-count-blok col-12 p-0 mt-1 ml-0 mb-0 mr-0 
+                             {{item.isSelected === true ? "d-inline-block" : "d-none"}}">
+                            [[let itemYes = _(element.items).find(item => {return item.title === "Да";})]]
+                            [[_(itemYes.socketsBlocs).each(socketsBlok => { ]]
+                            <div class="image-checkbox-item custom-control custom-checkbox my-1 d-inline-block">
+                                <input id="{{itemYes.id}}-entered-value-{{socketsBlok.number}}"
+                                       type="checkbox"
+                                       class="custom-control-input"
+                                       name="${element.id}"
+                                       {{socketsBlok.isSelected === true ? "checked" : ""}}
+                                       step-id="{{stepId}}"
+                                       element-id="{{element.id}}"
+                                       item-id="{{itemYes.id}}"
+                                       socket-block-number="{{socketsBlok.number}}" />
+                            </div>
+                            [[ } ]]
+                        </div>
+                     </div>
+                 </div>
+
+            </div>
+        </div>
+    [[ } ]]</script><script type="text/template" id="total-price-block"><h5 class="card-text text-center">≈ <span id="totalPrice">{{totalPriceBlock.totalPrice}}</span> EUR*</h5>
+    <p class="card-text text-center">* Цена является ориентировочной и после обсуждения с менеджером может быть скорректирована</p>
+    <div class="row">
+        <div class="col-12 text-center">
+            <button id="orderBtn" type="button" class="btn btn-lg btn-danger {{totalPriceBlock.orderSendBlock.showSendForm === true || showOrderButton !== true ? "invisible" : "visible"}}"
+                    step-id="{{stepId}}" element-id="{{elementId}}">Заказать</button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 text-center">
+            <form id="sendOrderForm" action="" class="{{totalPriceBlock.orderSendBlock.showSendForm === true ? "visible" : "invisible" }}">
+                <div class="form-group row mb-1">
+                    <label for="client-name" class="col-sm-3 col-form-label">Имя</label>
+                    <div class="col-sm-9">
+                        <input id="client-name" name="name" type="text" class="form-control form-control-sm"
+                               maxlength="50"
+                               value="{{totalPriceBlock.orderSendBlock.client.name}}" />
+                    </div>
+                </div>
+                <div class="form-group row mb-1">
+                    <label for="client-surname" class="col-sm-3 col-form-label">Фамилия</label>
+                    <div class="col-sm-9">
+                        <input id="client-surname" name="surname" type="text" class="form-control form-control-sm"
+                               maxlength="50"
+                               value="{{totalPriceBlock.orderSendBlock.client.surname}}" />
+                    </div>
+                </div>
+                <div class="form-group row mb-1">
+                    <label for="client-phone" class="col-sm-3 col-form-label">Телефон</label>
+                    <div class="col-sm-9">
+                        <input id="client-phone" name="phone" type="text" class="form-control form-control-sm" 
+                               value="{{totalPriceBlock.orderSendBlock.client.phone}}" />
+                    </div>
+                </div>
+                <div class="form-group row mb-1">
+                    <label for="client-phone" class="col-sm-3 col-form-label">Чертежи</label>
+                    <div id="file-input-block-container" class="col-sm-9 text-left">
+                        <div class="btn-group w-100">
+                            <div class="custom-file">
+                                <input id="client-drawing-0" name="client-drawing-0" type="file" accept=".jpg, .jpeg, .pdf"
+                                       class="custom-file-input client-drawing"
+                                       input-number="0">
+                                <div class="input-group-prepend">
+                                    <label id="client-drawing-label-0" for="client-drawing-0" 
+                                           class="custom-file-label text-left" 
+                                           data-browse="Загрузить">Выбрать файл .jpg .jpeg .pdf</label>
+                                </div>
+                             </div>
+                            <button type="button" class="file-input-block-clear-btn btn btn-sm btn-danger" input-number="0">x</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row mb-1">
+                    <div class="col-sm-12 text-right">
+                        <button type="submit" class="btn btn-sm btn-danger">Отправить заказ</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div id="sendProgressNotification" class="alert alert-primary position-absolute w-100 h-100 top-0-right-0 text-center
+         px-3 py-3" role="alert" 
+         style="display:none; z-index:3">
+        <h3 class="mt-5">Идёт отправка заказа...</h3>
+    </div>
+    <div id="sendErrorNotification" class="alert alert-danger position-absolute w-100 h-100 top-0-right-0 text-center
+         px-3 py-3" role="alert" 
+         style="display:none; z-index:3">
+        <h3 class="mt-5">При отправке заказа произошла ошибка</h3>
+        <hr>
+        <p id="sendErrorText">...</p>
+    </div>
+    <div id="sendFinishNotification"class="alert alert-success position-absolute w-100 h-100 top-0-right-0 text-center
+         px-3 py-3" role="alert" 
+         style="display:none; z-index:3;">
+        <h3 class="mt-5">Ваш заказ отправлен</h3>
+        <hr>
+        <p>Наш менеджер свяжется с вами в ближайшее время</p>
+    </div></script><script type="text/template" id="file-input-block"><div id="file-input-block-{{number}}" class="btn-group w-100">
+        <div class="custom-file">
+            <input id="client-drawing-{{number}}" name="client-drawing-{{number}}" type="file" accept=".jpg, .jpeg, .pdf"
+                   class="custom-file-input client-drawing" 
+                   input-number="{{number}}">
+            <div class="input-group-prepend">
+                <label  id="client-drawing-label-{{number}}" for="client-drawing-{{number}}" 
+                       class="custom-file-label text-left" data-browse="Загрузить">Выбрать файл .jpg .jpeg .pdf</label>
+            </div>
+        </div>
+        <button type="button" class="file-input-block-remove-btn btn btn-sm btn-danger" input-number="{{number}}">x</button>
+    </div></script><script type="text/template" id="tooltip-form-error"><div id="{{containerId}}" class="tooltip-form-error tooltip fade bs-tooltip-bottom show" role="tooltip" x-placement="bottom">
+        <div class="arrow" style="left: 57px;"></div>
+        <div id="{{labelId}}"class="tooltip-inner tooltip-form-error-inner">{{errorMessage}}</div>
+    </div></script><script type="text/template" id="order-mail"><h1>Заказ</h1>
+    <div>
+        <h3>Клиент:</h3>
+        <p>Имя: {{clientName}}</p>
+        <p>Фамилия: {{clientSurname}}</p>
+        <p>Телефон: {{clientPhone}}</p>
+        <hr>   
+        <p>Сумма заказа: <b>{{totalPrice}} &euro;</b></p>
+        <hr>   
+    </div>
+    [[ if (fileNames.length > 0){ ]]
+    <div>       
+        <h4>Приложены чертежи</h4>
+        <div>
+            [[_(fileNames).each(function(fileName) { ]]
+
+            <p>{{fileName}}</p>
+
+            [[ }) ]]
+            
+        </div>
+    </div>
+    [[ } ]]
+    <div>
+        <h3>Расчёт суммы:</h3>
+        [[ let rowIndex = 1;]]
+        [[ let currentRow = {};]]
+        <table style = "background: white; width: 100%;">
+            <tr style="background-color: #777;">
+                <th>#</th>
+                <th>Лог</th>
+            </tr>
+            </tbody>
+                [[_(logRows).each(function(row) { ]] 
+                    
+ 
+                    <tr style="{{ rowIndex % 2 ? "background: #EBEBEB;" : ""  }}  padding: 20px;
+                        text-align: left;
+                        vertical-align: middle;
+                        text-shadow: -1px -1px 1px rgba(0, 0, 0, 0.1);
+                        border-right: 1px solid #C1C3D1;">
+                        <td>
+                            <p style="font-size:10px">{{rowIndex}}.</p>
+                        </td>
+                        <td>
+                            <p style="
+                                {{ row.isMainParamsCalcInfo === true ? "font-size:10px; color:#808080;" : ""}}
+                                {{ row.isCalcInfo === true ? "font-size:15px; color:#000;" : ""}}
+                                {{ row.isInfo === true ? "font-size:10px; color:#000;" : ""}}
+                                {{ row.isTotalSumInfo === true ? "font-size:18px; color:#000;" : ""}}">
+                            {{row.message}}
+                            </p>
+                        </td>
+                    </tr>
+
+                   [[ rowIndex++; ]] 
+                [[ }) ]]
+            </tbody>
+        </table>
+    </div></script><script defer="defer" src="chunk-67bfadb2.a96455bb7ce049eb00f4.bundle.js"></script><script defer="defer" src="chunk-3113a0cb.812a1548552f6c4c9f3a.bundle.js"></script><script defer="defer" src="chunk-b1140668.f682e7828321d1386cf6.bundle.js"></script><script defer="defer" src="index.8a3d03b1395a6e13e58f.bundle.js"></script></body></html>

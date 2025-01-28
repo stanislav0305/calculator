@@ -1,0 +1,356 @@
+﻿body {
+    background-color: #f7f7f7;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6 {
+    margin-bottom: 0.5rem;
+    font-family: 'Oswald', sans-serif;
+    font-weight: 500;
+    line-height: 1.2;
+    color: inherit;
+}
+
+.form-control.is-invalid {
+    background-image: none;
+    padding: 0 !important;
+    margin: 0;
+}
+
+.tooltip-white .tooltip-inner {
+    color: #000;
+    background: #e6e6e6;
+  }
+  
+  .tooltip-white .bs-tooltip-top .arrow::before, 
+  .tooltip-white .bs-tooltip-auto[x-placement^="top"] .arrow::before {
+    color: #000;
+    border-top-color: #e6e6e6;
+  }
+  .tooltip-white .bs-tooltip-right .arrow::before, 
+  .tooltip-white .bs-tooltip-auto[x-placement^="right"] .arrow::before {
+    color: #000;
+    border-right-color: #e6e6e6;
+  }
+  .tooltip-white .bs-tooltip-bottom .arrow::before, 
+  .tooltip-white .bs-tooltip-auto[x-placement^="bottom"] .arrow::before {
+    color: #000;
+    border-bottom-color: #e6e6e6;
+  }
+  
+  .tooltip-white .bs-tooltip-left .arrow::before, 
+  .tooltip-white .bs-tooltip-auto[x-placement^="left"] .arrow::before {
+    color: #000;
+    border-left-color: #e6e6e6;
+  }
+
+.tooltip-form-error {
+    position: relative;
+    z-index: 0 !important;
+    max-height: none;
+}
+
+.tooltip-form-error-inner {
+    color: #000 !important;
+    background-color: #fb9393;
+    width: 100%;
+    max-width: none;
+}
+
+.tooltip-form-error.bs-tooltip-right .arrow:before {
+    color: #000 !important;
+    border-right-color: #fb9393 !important;
+}
+
+.tooltip-form-error.bs-tooltip-left .arrow:before {
+    color: #000 !important;
+    border-left-color: #fb9393 !important;
+}
+
+.tooltip-form-error.bs-tooltip-bottom .arrow:before {
+    color: #000 !important;
+    border-bottom-color: #fb9393 !important;
+}
+
+.tooltip-form-error.bs-tooltip-top .arrow:before {
+    color: #000 !important;
+    border-top-color: #fb9393 !important;
+}
+
+
+
+.top-0-right-0 {
+    top: 0;
+    right: 0;
+}
+
+
+.order-step {
+    height: 100%;
+    min-height: 250px;
+    background-color: #ffffff;
+    color: #404041;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    -webkit-box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.18);
+    -moz-box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.18);
+    box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.18);
+}
+
+.order-step.is-invalid {
+    border-color: #dc3545;
+}
+
+.handle-type-img {
+    width: 70px;
+    height: 70px;
+}
+
+.cabin-type-img {
+    width: 170px;
+    height: 240px;
+}
+
+.socket-img {
+    display: inline-block;
+    width: 40px;
+    height: 42px;
+    content: url('../img/socket.jpg');
+}
+
+.sliding-door-type-img {
+    width: 110px;
+    height: 150px;
+}
+
+.swing-door-type-img {
+    width: 110px;
+    height: 150px;
+}
+
+.sliding-door-type-label {
+    text-align: center;
+    width: 100%;
+}
+
+.swing-door-type-label {
+    text-align: center;
+    width: 100%;
+}
+
+.image-radio-item .custom-control-label::before {
+    display: none !important;
+}
+
+.image-radio-item.custom-radio input[type=radio]:checked+label {
+    border: 1px solid #fff;
+    box-shadow: 0 0 3px 3px #007bff;
+}
+
+.image-radio-item.custom-radio input[type=radio]+label {
+    border: 1px dashed #e6e6e6;
+    transition: 500ms all;
+}
+
+.image-checkbox-item .custom-control-label::before {
+    display: none !important;
+}
+
+.image-checkbox-item.custom-checkbox input[type=checkbox]:checked+label {
+    border: 1px solid #fff;
+    box-shadow: 0 0 3px 3px #007bff;
+}
+
+.image-checkbox-item.custom-checkbox input[type=checkbox]+label {
+    border: 1px dashed #e6e6e6;
+    transition: 500ms all;
+}
+
+.socket-checkbox-label {
+    width: 208px;
+}
+
+
+.numberInput {
+    width: 80px;
+}
+
+.small-numberInput {
+    width: 40px;
+}
+
+.left {
+    float: left;
+}
+
+.right {
+    float: right;
+}
+
+.blue-text {
+    color: #5ec7f1;
+}
+
+.error {
+    color: #ff0000;
+}
+
+.custom-file-label {
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.question-img {
+    background-image: url('../img/question.png');
+    background-repeat: no-repeat;
+    width: 17px;
+    height: 17px;
+    margin: 0;
+    padding: 0;
+}
+
+.cabin-type-img-content-1 {
+    content: url('../img/cabinTypes/1.png');
+}
+
+.cabin-type-img-content-2 {
+    content: url('../img/cabinTypes/2.png');
+}
+
+.cabin-type-img-content-3 {
+    content: url('../img/cabinTypes/3.png');
+}
+
+.cabin-type-img-content-4 {
+    content: url('../img/cabinTypes/4.png');
+}
+
+.cabin-type-img-content-5 {
+    content: url('../img/cabinTypes/5.png');
+}
+
+.cabin-type-img-content-6 {
+    content: url('../img/cabinTypes/6.png');
+}
+
+.cabin-type-img-content-7 {
+    content: url('../img/cabinTypes/7.png');
+}
+
+.cabin-type-img-content-8 {
+    content: url('../img/cabinTypes/8.png');
+}
+
+
+.sliding-door-type-img-content-1 {
+    content: url('../img/slidingDoorTypes/1.png');
+}
+
+.sliding-door-type-img-content-2 {
+    content: url('../img/slidingDoorTypes/2.png');
+}
+
+
+.swing-door-type-img-content-1 {
+    content: url('../img/swingDoorsTypes/1.png');
+}
+
+.swing-door-type-img-content-2 {
+    content: url('../img/swingDoorsTypes/2.png');
+}
+
+
+.handle-type-img-content-1 {
+    content: url('../img/handleTypes/1.jpg');
+}
+
+.handle-type-img-content-2 {
+    content: url('../img/handleTypes/2.jpg');
+}
+
+.handle-type-img-content-3 {
+    content: url('../img/handleTypes/3.jpg');
+}
+
+.handle-type-img-content-4 {
+    content: url('../img/handleTypes/4.jpg');
+}
+
+.handle-type-img-content-5 {
+    content: url('../img/handleTypes/5.jpg');
+}
+
+.handle-type-img-content-6 {
+    content: url('../img/handleTypes/6.jpg');
+}
+
+.handle-type-img-content-7 {
+    content: url('../img/handleTypes/7.jpg');
+}
+
+.handle-type-img-content-8 {
+    content: url('../img/handleTypes/8.jpg');
+}
+
+.handle-type-img-content-9 {
+    content: url('../img/handleTypes/9.jpg');
+}
+
+.handle-type-img-content-10 {
+    content: url('../img/handleTypes/10.jpg');
+}
+
+.handle-type-img-content-11 {
+    content: url('../img/handleTypes/11.jpg');
+}
+
+.handle-type-img-content-12 {
+    content: url('../img/handleTypes/12.jpg');
+}
+
+.handle-type-img-content-13 {
+    content: url('../img/handleTypes/13.jpg');
+}
+
+.handle-type-img-content-14 {
+    content: url('../img/handleTypes/14.jpg');
+}
+
+.handle-type-img-content-15 {
+    content: url('../img/handleTypes/15.jpg');
+}
+
+.handle-type-img-content-16 {
+    content: url('../img/handleTypes/16.jpg');
+}
+
+.handle-type-img-content-17 {
+    content: url('../img/handleTypes/17.jpg');
+}
+
+.handle-type-img-content-18 {
+    content: url('../img/handleTypes/18.jpg');
+}
+
+.handle-type-img-content-19 {
+    content: url('../img/handleTypes/19.jpg');
+}
+
+.handle-type-img-content-20 {
+    content: url('../img/handleTypes/20.jpg');
+}
+
+.handle-type-img-content-21 {
+    content: url('../img/handleTypes/21.jpg');
+}

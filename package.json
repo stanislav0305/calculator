@@ -1,0 +1,54 @@
+{
+  "name": "calculator",
+  "version": "1.0.0",
+  "description": "Online calculator for calculating skinali. Calculation of the cost of manufacturing a glass apron.",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "start-only": "webpack serve",
+    "build-and-start": "npm run build-dev && npm run start-only",
+    "build-dev": "webpack --mode=development",
+    "build-prod": "webpack --mode=production",
+    "clear-dev": "rd /s /q build",
+    "clear-prod": "rd /s /q docs",
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/stanislav0305/calculator.git"
+  },
+  "keywords": [
+    "Online",
+    "calculator",
+    "calculating",
+    "skinali"
+  ],
+  "author": "Torman Stanislav",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/stanislav0305/calculator/issues"
+  },
+  "homepage": "https://github.com/stanislav0305/calculator#readme",
+  "devDependencies": {
+    "css-loader": "^7.1.2",
+    "html-webpack-plugin": "^5.6.3",
+    "image-minimizer-webpack-plugin": "^4.1.3",
+    "imagemin": "^9.0.0",
+    "imagemin-gifsicle": "^7.0.0",
+    "imagemin-jpegtran": "^8.0.0",
+    "imagemin-optipng": "^8.0.0",
+    "mini-css-extract-plugin": "^2.9.2",
+    "webpack": "^5.97.1",
+    "webpack-cli": "^6.0.1",
+    "webpack-dev-server": "^5.2.0"
+  },
+  "dependencies": {
+    "bootstrap": "^4.3.1",
+    "jquery": "^3.3.1",
+    "jquery-validation": "^1.19.0",
+    "popper.js": "^1.16.1",
+    "underscore": "^1.8.3"
+  }
+}
